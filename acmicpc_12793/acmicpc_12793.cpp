@@ -21,22 +21,22 @@ void floodfill(const vector<string>& raw, vector<vector<int>> &data){
                 dq.push_back({i,j});
                 label++;
                 //cout<<"start\n";
+                set<pair<int,int>> visited;
                 while(!dq.empty()){
                     auto [x,y] = dq.front();dq.pop_front();
                     //cout<<x<< " "<<y<<" "<<raw[x][y]<<" label:"<<label<<endl;
                     data[x/2][y/2] = label;
                     //travel next
-                    int nx = x+1, ny=y+1;
-                    if(x+1 < raw.size()){
-                        if(raw[nx][y] == '.'|| raw[nx][y] == 'B'){
-                            dq.push_back({nx,y});
+                    int mv[2][4]={{0,0,1,-1},{-1,1,0,0}};
+                    visited.insert({x,y});
+                    for(int m = 0; m < 4; ++m){
+                        int nx = x+mv[0][m];
+                        int ny = y+mv[1][m];
+                        if(nx>=0 && nx < data.size() && ny >=0 && ny <data[0].size()&&
+                        raw[nx][ny] == '.'|| raw[nx][ny] == 'B'&&visited.find({nx,ny}) == visited.end()){
+                            dq.push_back({nx,ny});
                         }
-                    }
-                    if(y+1 < raw[0].size()){
-                        if(raw[x][ny] == '.'|| raw[x][ny] == 'B'){
-                            dq.push_back({x,ny});
-                        }
-                    }
+                    }                   
                 }
             }else if(raw[i][j]== 'O'){
                 data[i/2][j/2]=0;
