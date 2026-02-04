@@ -50,6 +50,10 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
     
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout); // Nếu bạn muốn xuất ra file luôn
+    #endif
     
     cin>>N>>M>>K;
     vector<vector<int>> data(M,vector<int>(N,-1));//labeling 
