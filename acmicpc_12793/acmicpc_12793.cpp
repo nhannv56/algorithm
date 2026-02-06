@@ -72,9 +72,10 @@ int solve(vector<vector<int>>& data, float k){
         // cout<<x<< " "<< y<< " " <<data[i][j]<<endl;
         if(data[i][j]!=0)collected.insert(data[i][j]);
         x = nx; y = ny;
-        if(x < 0 || y == 0){
+        if(x < 0 || y == 0){// điều kiện biên nếu xuất phát từ 0, 0  hoặc kết thúc khi y = 0
             break;
         }
+		// chuyển hướng
         if(x==0){
             mvx=1;
         }
