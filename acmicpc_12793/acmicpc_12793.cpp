@@ -1,7 +1,7 @@
 /******************************************************************************
 
 https://www.acmicpc.net/problem/12793
-bfs, foodfill
+bfs, foodfill, tọa độ đường đi
 
 *******************************************************************************/
 #include <iostream>
@@ -12,6 +12,7 @@ using namespace std;
 int N,M;
 void floodfill(const vector<string>& raw, vector<vector<int>> &data){
     int label = 0;
+    vector<vector<bool>> visited(raw.size(), vector<bool>(raw[0].length(), false));
     for(int i = 1; i < raw.size(); i+=2){
         // cout<<raw[i]<<endl;
         for(int j = 1; j < raw[i].length(); j+=2){
@@ -19,22 +20,27 @@ void floodfill(const vector<string>& raw, vector<vector<int>> &data){
             if(raw[i][j]=='B' && data[i/2][j/2] == -1){
                 deque<pair<int,int>> dq;
                 dq.push_back({i,j});
+                visited[i][j] = true;
                 label++;
                 //cout<<"start\n";
-                set<pair<int,int>> visited;
+                
                 while(!dq.empty()){
                     auto [x,y] = dq.front();dq.pop_front();
                     //cout<<x<< " "<<y<<" "<<raw[x][y]<<" label:"<<label<<endl;
-                    data[x/2][y/2] = label;
+                    if(raw[x][y]=='B'){
+                        data[x/2][y/2] = label;
+                    }
                     //travel next
-                    int mv[2][4]={{0,0,1,-1},{-1,1,0,0}};
-                    visited.insert({x,y});
+                    int mv[2][4]={  {0,0,1,-1},
+                                    {-1,1,0,0}};
+                    
                     for(int m = 0; m < 4; ++m){
                         int nx = x+mv[0][m];
                         int ny = y+mv[1][m];
-                        if(nx>=0 && nx < data.size() && ny >=0 && ny <data[0].size()&&
-                        raw[nx][ny] == '.'|| raw[nx][ny] == 'B'&&visited.find({nx,ny}) == visited.end()){
+                        if(nx>=0 && nx < raw.size() && ny >=0 && ny <raw[0].length()&&
+                        (raw[nx][ny] == '.'|| raw[nx][ny] == 'B')&& !visited[nx][ny]){
                             dq.push_back({nx,ny});
+                            visited[nx][ny] = true;
                         }
                     }                   
                 }
@@ -45,70 +51,40 @@ void floodfill(const vector<string>& raw, vector<vector<int>> &data){
     }
 }
 int solve(vector<vector<int>>& data, float k){
-    int res = 0;
-    //x0 < min(R,C);
-    float minRC = min(data.size(), data[0].size());
-    float x0,x1;
+
     set<int> collected;
-    float y = 0;
-    if(k != minRC){//x0+x1=2minRC
-        x1 = k;
-        x0 = minRC*2-x1;
-        //first line y = -x + x0
-        //2nd line y = -x + x0 
-        //3th line y = x + x1
-        for(auto x = x0; x > 0; x-=0.5){
-            y = -x + x0;
-            if(y >= data.size()){
-                break;
-            }
-            int i = data.size()-1- floor(y);
-            auto label = data[i][ceil(x)];
-            if(label != 0){
-                // cout<<"insert:"<<i<<" "<<ceil(x)<<" "<<label<<endl;
-                collected.insert(label);
-            }
+    float mx[2]={-0.5, 0.5};
+    float my[2]={-0.5, 0.5};
+    //0 up left 
+    //1 up right 
+    //2 down left 
+    //3 down right
+    int MAX_X= data[0].size();
+    int MAX_Y = data.size();
+    float y = 0, x = k;
+    int mvx= 0, mvy=1;
+    while(true){
+        float nx = x+ mx[mvx];
+        float ny = y+ my[mvy];
+        //lấy tâm của 2 điểm -> chắc chắn nằm trong 1 ô -> chuyển về tọa độ ô và check label
+        int i = data.size()-1-int((y+ny)/2);
+        int j = (x+nx)/2;
+        // cout<<x<< " "<< y<< " " <<data[i][j]<<endl;
+        if(data[i][j]!=0)collected.insert(data[i][j]);
+        x = nx; y = ny;
+        if(x < 0 || y == 0){
+            break;
         }
-        
-        for(auto x = x1; x > 0; x-=0.5){
-            y = -x + x1;
-            if(y >= data.size()){
-                break;
-            }
-            int i = data.size()-1- floor(y);
-            auto label = data[i][ceil(x)];
-            if(label != 0){
-                // cout<<"insert:"<<i<<" "<<ceil(x)<<" "<<label<<endl;
-                collected.insert(label);
-            }
+        if(x==0){
+            mvx=1;
         }
-        for(float x = 0; x < minRC; x+=0.5){
-            y = x + min(x0, x1);
-            if(y >= data.size()){
-                break;
-            }
-            int i= data.size()-1- ceil(y-0.5);
-            auto label = data[i][ceil(x+0.5)];
-            if(label != 0){
-                // cout<<"insert:"<<i<<" "<<ceil(x+0.5)<<" "<<label<<endl;
-                collected.insert(label);
-            }
+        if(x==MAX_X){
+            mvx=0;
         }
-    }else{//only 1 line
-        for(auto x = k; x > 0; x-=0.5){
-            y = -x + k;
-            if(y >= data.size()){
-                break;
-            }
-            int i = data.size()-1- floor(y);
-            auto label = data[i][ceil(x)];
-            if(label != 0){
-                // cout<<"insert:"<<i<<" "<<ceil(x)<<" "<<label<<endl;
-                collected.insert(label);
-            }
+        if(y == MAX_Y){
+            mvy = 0;
         }
     }
-    
     return collected.size();
 }
 int main()
@@ -116,11 +92,7 @@ int main()
     std::ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
-    
-    #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout); // Nếu bạn muốn xuất ra file luôn
-    #endif
+
     float K;
     cin>>N>>M>>K;
     vector<vector<int>> data(M,vector<int>(N,-1));//labeling 
@@ -128,15 +100,9 @@ int main()
     for(int i = 0; i < raw.size();++i){
         cin>>raw[i];
     }
-    // for(int i = 0; i < raw.size();++i){
-    //     cout<<raw[i]<<endl;
-    // }
+
     floodfill(raw,data);
-    // for(auto r : data){
-    //     for(auto c : r){
-    //         cout<<c<<" ";
-    //     }cout<<endl;
-    // }
+    
     cout<<solve(data, K);
 	return 0;
 }
