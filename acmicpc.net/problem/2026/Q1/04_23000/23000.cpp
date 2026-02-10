@@ -3,7 +3,7 @@
 https://www.acmicpc.net/problem/23000
 prefix sum, grids
 dùng prefix sum lưu tổng trái, phải, trên, dưới tại mỗi điểm
-tính tại mỗi điểm là góc của chữ L tìm chữ L
+tính tại mỗi điểm là góc của chữ L tính số lượng
 
 *******************************************************************************/
 #include <iostream>
@@ -12,19 +12,21 @@ tính tại mỗi điểm là góc của chữ L tìm chữ L
 
 using namespace std;
 struct Node{
-    int t=0,d=0,l=0,r=0;
+    int t=0,d=0,l=0,r=0;//top down, left right
 };
 int cal(int l1, int l2){
     int mi = min(l1,l2);
     int ma = max(l1,l2);
     int res = 0;
+    //min là cạnh dài -> bỏ qua số chẵn 2 ko phải là cạnh dài
     if(mi>=4){
         res+=mi/2-1;
     }
+    //cạnh max là cạnh dài  max >=4 và min >=2 là chữ L valid
     if(ma >= 4 && mi >=2){
-        if(mi*2 >= ma){
+        if(mi*2 >= ma){//cạnh ngắn thừa tính số lượng chữ L theo cạnh dài
             res+=ma/2-1;
-        }else{
+        }else{// cạnh dài thừa -> count theo cạnh ngắn
             res+=mi-1;
         }
     }
