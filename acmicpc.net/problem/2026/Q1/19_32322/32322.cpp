@@ -3,6 +3,7 @@
 https://www.acmicpc.net/problem/32322
 
 algo:segment tree sum range
+Dùng segment tree tính sum trong khoảng
 *******************************************************************************/
 #include <iostream>
 #include<bits/stdc++.h>
