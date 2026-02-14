@@ -3,7 +3,7 @@
 https://www.acmicpc.net/problem/2433
 Data Structures
 Deque
-Sliding Window
+algo: Slide Window
 Deque Range Maximum Trick
 
 *******************************************************************************/
