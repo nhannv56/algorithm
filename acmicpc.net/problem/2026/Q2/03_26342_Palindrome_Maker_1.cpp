@@ -1,7 +1,7 @@
 /******************************************************************************
 https://www.acmicpc.net/problem/26342
 algo:lcs
-
+algo:dp
 Tìm lcs longest common subsequence từ 2 chuỗi cho sẵn và i-j không quá 100
 *******************************************************************************/
 #include <iostream>
