@@ -3,7 +3,7 @@
 https://www.acmicpc.net/problem/3745
 Binary Search
 Longest Increasing Sequence Problem
-LIS
+algo: LIS
 
 *******************************************************************************/
 #include <iostream>

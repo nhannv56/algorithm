@@ -1,8 +1,9 @@
 #/******************************************************************************
 
-dp, lcs 
-Dynamic Programming
-Longest Common Subsequence
+algo: dp
+algo: lcs 
+algo: Dynamic Programming
+algo: Longest Common Subsequence
 *******************************************************************************/
 #include <iostream>
 #include<string.h>
@@ -37,10 +38,12 @@ int main()
         for(int j = 0; j <= P1Len; ++j){
             for(int k = 0; k <= P2Len; ++k){
                 if(j > 0 || k > 0){
+                    //chuỗi dài i = max chuỗi dài i-1, và hiện tại
                     dp[i][j][k] = max(dp[i-1][j][k],dp[i][j][k]);
                     if(j > 0){
+                        //chuỗi dài i max chuội j-1,k
                         dp[i][j][k] = max(dp[i][j-1][k],dp[i][j][k]);
-                        if(p1[j-1] == x[i-1]){
+                        if(p1[j-1] == x[i-1]){// chuỗi tạo được bằng chuỗi target
                             dp[i][j][k] = max(dp[i-1][j-1][k]+1,dp[i][j][k]);
                         }
                     }
