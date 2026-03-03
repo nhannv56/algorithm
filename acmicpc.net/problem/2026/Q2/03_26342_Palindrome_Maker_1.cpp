@@ -3,6 +3,15 @@ https://www.acmicpc.net/problem/26342
 algo:lcs
 algo:dp
 Tìm lcs longest common subsequence từ 2 chuỗi cho sẵn và i-j không quá 100
+
+Mô tả cách giải bằng BFS
+Bài toán có thể được mô hình hóa như một đồ thị trạng thái (State Graph) và dùng BFS để đếm số đường đi.
+Trạng thái bắt đầu: (0, 0, 0)
+Trạng thái kết thúc: (L0, L1, L2)
+
+(i,j,k) ──words[0][i] == message[t]──► (i+1, j,   k  )
+(i,j,k) ──words[1][j] == message[t]──► (i,   j+1, k  )
+(i,j,k) ──words[2][k] == message[t]──► (i,   j,   k+1)
 *******************************************************************************/
 #include <iostream>
 #include<bits/stdc++.h>
