@@ -1,6 +1,7 @@
 /******************************************************************************
 https://www.acmicpc.net/problem/24579
-N*N
+algo: binary search
+algo: pigeonhole principle
 
 *******************************************************************************/
 #include <iostream>
@@ -26,17 +27,22 @@ long long solve(vector<long long>& d, long long p, long long k){
     long long i = 0, c = 0, m =  0;//i là chỉ số bắt đầu, m la số ngày đã mở cửa, c lần full rehearsal
     long long t = p;// t là thời gian cần check
     bool cycle = false;
-    if(t >= prefix[n] && t% prefix[n]==0){
-        return ((long long)(t/prefix[n]))*k;
+    if(t >= prefix[n-1] && t% prefix[n-1]==0){
+        return ((long long)(t/prefix[n-1]))*k;
     }
-    while( true ){//điều kiện với c full cần m day
+    while( true ){
+        //đảm bảo t lớn -> chảy cóc t > hơn 1 vòng
         if(t >= prefix[n-1]){
             c+= (long long)(t/prefix[n-1]);
             t%= prefix[n-1];
         }
-        auto last = upper_bound(prefix.begin()+i, prefix.end(), t+*(prefix.begin()+i));
+        //mốc thời gian tiếp theo cần kiểm tả
+        auto target = t+(i>0?(*(prefix.begin()+i-1)):0);
+
+        //binary seach để tìm next student từ i có thể cover
+        auto last = upper_bound(prefix.begin()+i, prefix.end(), target);
         if(last != prefix.end()){
-            i = distance(prefix.begin(), last)-1;
+            i = distance(prefix.begin(), last);
             //không thể cover hết đến last -> next reset về time = p
             t = p;
             ++m;
@@ -44,8 +50,9 @@ long long solve(vector<long long>& d, long long p, long long k){
                 i -= n;
                 c++;
             }
+            //kiểm tra tìm được vòng
             if(days[i] != -1){
-                if(!cycle){
+                if(!cycle){//nhảy cóc
                     long long numCycle = (k-m)/(m-days[i]);
                     long long cycleD = numCycle*(m-days[i]);
                     m += cycleD;
@@ -53,7 +60,7 @@ long long solve(vector<long long>& d, long long p, long long k){
                     cycle = true;
                 }
 
-            }else{
+            }else{//cập nhật ngày đầu tiên bắt đầu từ học sinh i nếu lặp lại ->vòng 
                 days[i]=m;
                 full[i]=c;
             }
@@ -62,8 +69,7 @@ long long solve(vector<long long>& d, long long p, long long k){
                 return c;
             }
         }else{
-            // cout<<"bug: "<<t<<" i: "<<i<<" prefix[i]: "<<prefix[i]<<endl;
-            break;
+            //bug
         }        
     }        
     return c;
