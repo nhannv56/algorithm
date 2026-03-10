@@ -1,6 +1,12 @@
 /******************************************************************************
 
 https://www.acmicpc.net/problem/27362
+algo: binary search
+algo: two pointer
+algo: sort
+dùng two pointer để tìm số cặp l, r
+l với các cặp tới r
+binary search để tìm thỏa mãn
 
 *******************************************************************************/
 #include <iostream>
@@ -9,41 +15,44 @@ https://www.acmicpc.net/problem/27362
 
 using namespace std;
 int N, K;
+int countPair(vector<int> AB, int D){
+    int count = 0;
+    int r = 0;
+    for(int l=0; l < N; ++l){
+        while(r < N && AB[r]-AB[l]<=D){
+            r++;
+        }
+        count+=(r-l-1);
+    }
+    return count;
+}
 long long solve(int A[], int B[]){
-    int res = 0;
-    int AB[N];
+    int res = -1;
+    vector<int> AB(N);
+    // vector<int> Z(N,0);
+    
+    //special case Z[i,j] = |X(i,j)- Y(i.j))| = |Ai - Aj - Bi + Bj| = |(Ai-Bi)-(Aj-Bj)|
+    //K = |a-b|
+    // he uses $Z$ to define a function C: C(D) = | {(i, j) : Z(i, j) <= D } |. 
     for(int i = 0; i < N; ++i){
         AB[i]=A[i]-B[i];
     }
-    //special case Z[i,j] = |X(i,j)- Y(i.j))| = |Ai - Aj - Bi + Bj| = (Ai-Bi)-(Aj-Bj)
-    //K = |a-b|
-    if(K > 2e5){
-        return 0;
-    }
-    vector<vector<int>> counts(2e5+1);
-    for(int i = 0; i < N;++i){
-        counts[AB[i]+1e5].push_back(i);
-    }
-    for(int i = 0; i < N; ++i){
-        int a = AB[i];
-        int b1 = a-K;
-        int b2 = a+K;
-        if(b1 >= -1e5 ){
-            auto find = upper_bound(counts[b1+1e5].begin(), counts[b1+1e5].end(), i);
-            if(find != counts[b1+1e5].end()){
-                // cout<<"found:\n";
-                res+= counts[b1+1e5].size()-distance(counts[b1+1e5].begin(),find);
+    sort(AB.begin(), AB.end());
+    int l = 0;
+    int r = AB[N-1] - AB[0];
+    while(l <= r){
+        int mid = l+(r-l)/2;
+        int tmpCount = countPair(AB,mid);
+        if( tmpCount >= K){
+            if(tmpCount == K){
+                res = mid;
             }
-        }
-        if(b2 >= -1e5 ){
-            auto find = upper_bound(counts[b2+1e5].begin(), counts[b2+1e5].end(), i);
-            if(b2 >= -1e5 &&find != counts[b2+1e5].end()){
-                // cout<<"found:\n";
-                res+= counts[b2+1e5].size()-distance(counts[b2+1e5].begin(),find);
-            }
+            r = mid-1;
+        }else{
+            l = mid+1;
         }
     }
-    return res == 0 ? -1 : res;
+    return res;
 }
 int main()
 {
