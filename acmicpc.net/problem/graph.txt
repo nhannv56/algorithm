@@ -1,0 +1,74 @@
+================================================================================
+          TONG HOP CAC THUAT TOAN TIM DUONG DI NGAN NHAT (SHORTEST PATH)
+================================================================================
+
+1. TIM DUONG DI TU MOT NGUON (SINGLE-SOURCE SHORTEST PATH - SSSP)
+--------------------------------------------------------------------------------
+
+A. BFS (Breadth-First Search)
+   - Cach dung: Do thi khong trong so (hoac tat ca trong so bang nhau).
+   - Do phuc tap: O(V + E)
+   - Dac diem: Su dung Queue. Day la cach nhanh nhat cho do thi khong trong so.
+
+B. Thuat toan Dijkstra
+   - Cach dung: Do thi co trong so khong am.
+   - Do phuc tap:
+     + Dung mang danh dau: O(V^2)
+     + Dung priority_queue (Binary Heap): O(E log V)
+     + Dung Fibonacci Heap: O(E + V log V)
+   - Dac diem: Thuat toan tham lam (Greedy). Khong hoat dong neu co canh am.
+
+C. Thuat toan Bellman-Ford
+   - Cach dung: Do thi co canh trong so am.
+   - Do phuc tap: O(V * E)
+   - Dac diem: Co kha nang phat hien chu trinh am (Negative Cycle).
+
+D. Thuat toan SPFA (Shortest Path Faster Algorithm)
+   - Cach dung: Ban cai tien cua Bellman-Ford dung Queue.
+   - Do phuc tap: Trung binh O(k * E) voi k nho, xau nhat la O(V * E).
+   - Dac diem: Rat hieu qua trong lap trinh thi dau (CP).
+
+
+2. TIM DUONG DI GIUA MOI CAP DINH (ALL-PAIRS SHORTEST PATH - APSP)
+--------------------------------------------------------------------------------
+
+A. Thuat toan Floyd-Warshall
+   - Cach dung: Tim duong di giua moi cap (u, v).
+   - Do phuc tap: O(V^3)
+   - Dac diem: Quy hoach dong. Cai dat don gian (3 vong lap long nhau). 
+     Hoat dong duoc voi canh am nhung khong co chu trinh am.
+
+B. Thuat toan Johnson
+   - Cach dung: Do thi thua (E nho), co trong so am.
+   - Do phuc tap: O(V * E log V + V^2)
+   - Dac diem: Ket hop Bellman-Ford va Dijkstra.
+
+
+3. BANG SO SANH TONG HOP
+--------------------------------------------------------------------------------
+| Thuat toan      | Loai do thi      | Canh am | Do phuc tap           |
+|-----------------|------------------|---------|-----------------------|
+| BFS             | Khong trong so   | Khong   | O(V + E)              |
+| Dijkstra        | Co trong so      | Khong   | O(E log V)            |
+| Bellman-Ford    | Co trong so      | Co      | O(V * E)              |
+| SPFA            | Co trong so      | Co      | O(kE) (Trung binh)    |
+| Floyd-Warshall  | Moi cap dinh     | Co      | O(V^3)                |
+| Johnson         | Moi cap dinh     | Co      | O(VE log V + V^2)     |
+
+
+4. CAC TRUONG HOP DAC BIET & TOI UU
+--------------------------------------------------------------------------------
+- Do thi DAG (Directed Acyclic Graph): 
+  Dung Quy hoach dong + Sap xep Topo. Do phuc tap: O(V + E).
+  
+- 0-1 BFS:
+  Dung khi trong so chi gom {0, w}. Su dung std::deque thay cho priority_queue.
+  Do phuc tap: O(V + E).
+
+- Truy vet duong di:
+  Su dung mang parent[] de luu dinh truoc do moi khi thuc hien thao tac Relax:
+  if (dist[v] > dist[u] + w) {
+      dist[v] = dist[u] + w;
+      parent[v] = u;
+  }
+================================================================================
