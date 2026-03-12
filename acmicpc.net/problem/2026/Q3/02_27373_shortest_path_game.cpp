@@ -1,7 +1,8 @@
 /******************************************************************************
 
 https://www.acmicpc.net/problem/27373
-algo: dijiktra
+algo: floy
+algo: dp
 
 *******************************************************************************/
 #include <iostream>
@@ -45,7 +46,7 @@ long long score(stack<long long>& totals){
 //dijiktra tìm khoảng cách trước-> tổng
 //thêm/xóa 1 cạnh -> cạnh đó ảnh hưởng tới bao nhieu path 
 void add(long long u, long long v, long long w,stack<Edge>& edges, stack<vector<vector<long long>>>& st,stack<long long>& totals){
-    
+    total = totals.top();
     auto dist = st.top();
     if(w < dist[u][v]){
         // dist[u][v]=w;
@@ -53,7 +54,7 @@ void add(long long u, long long v, long long w,stack<Edge>& edges, stack<vector<
         // cout<<"dis:"<<u<<" "<<v<<" d:"<<dist[u][v]<<endl;
         for (long long i = 1; i <= N; i++) {
             for (long long j = i+1; j <= N; j++) {
-                if (i == j) continue;
+                // if (i == j) continue;
                 
                 // Kiểm tra xem cạnh (u, v) có nằm trên lộ trình i -> j không
                 if (dist[i][u] + w + dist[v][j] < dist[i][j] ) {
@@ -66,7 +67,8 @@ void add(long long u, long long v, long long w,stack<Edge>& edges, stack<vector<
                     dist[i][j] = dist[i][u] + w + dist[v][j];
                     dist[j][i] = dist[i][u] + w + dist[v][j];
                     // cout<<"reduce:"<<i<<" "<<u<<" "<<v<<" "<<j<<" |"<<dist[i][u]<<" "<<reduce<<" "<<dist[v][j]<<endl;
-                }else if (dist[i][v] + w + dist[u][j] < dist[i][j] ) {
+                }
+                if (dist[i][v] + w + dist[u][j] < dist[i][j] ) {
                     if(dist[i][j]!=INF){
                         long long reduce = dist[i][j] -(dist[i][v] + w + dist[u][j]);
                         total-=reduce;
