@@ -7,20 +7,24 @@ https://www.acmicpc.net/problem/27357
 #include <iterator> // For std::next
 using namespace std;
 long long T, N;
-pair<double, double> cal(double sum, double tax){
-    double t1,t2;
-    t1 = (sum*tax)/100;
-    t2 = (sum*tax)/100;
-    t1 = floor(t1*100)/100;
-    t2 = ceil(t2*100)/100;
+pair<long long, long long> cal(long long sum, long long tax){
+    long long t1,t2;
+    t1 = (sum*tax);
+    t2 = t1;
+    t1/=100;
+    if(t2 % 100 != 0){//round up
+        t2 = t1+1;
+    }else{
+        t2=t1;
+    }
     return {t1+sum, t2+sum};
 }
-pair<long long, long long> solve(double sum,const double X){
+pair<long long, long long> solve(long long sum,const long long X){
     long long l = -1, r=-1;
     for(long long i = 0; i <= 1e4; ++i){
         auto [mi,ma] = cal(sum, i);
-        if( (long long)mi == (long long)X || (long long)ma == (long long)X){
-            // cout<<"solve:"<<i<<" mi:"<<mi<<" ma:"<<ma<<" x:"<<X<<endl;
+        if( mi/100 == X || ma/100 == X){
+            // cout<<i<<" sum:"<<sum<<" X:"<<X<<" mi:"<<mi<<" ma:"<<ma<<endl;
             if(l == -1){
                 l = i;
                 r = i;
@@ -41,15 +45,16 @@ int main()
     freopen("output.txt", "w", stdout); // Nếu bạn muốn xuất ra file luôn
     #endif
     cin>>T;
-    double X;
+    long long  X;
     // cout<<"ceil:"<<ceil(99.9)<<endl;
     while(T > 0){
         cin>>N>>X;
-        double sum = 0;
+        long long sum = 0;
         double x;
         for(long long i= 0; i < N; ++i){
             cin>>x;
-            sum+=x;
+            sum+=round(x*100.0);
+            // cout<<(long long)(x*100)<< " "<<sum<<endl;
         }
         auto [l, r] = solve(sum, X);
         cout<<l<<' '<<r<<'\n';
