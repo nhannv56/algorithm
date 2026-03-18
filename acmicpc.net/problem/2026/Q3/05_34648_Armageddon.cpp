@@ -1,5 +1,11 @@
 /******************************************************************************
 https://www.acmicpc.net/problem/34648
+algo: math
+algo: Fermat's Little Theorem (fermat nhỏ)
+algo: greedy
+algo: tối ưu tích khi a*b*c -> tiến gần đến a=b=c 
+Suy ra tiến gần tăng 1
+Chú ý tràn số khi nhân
 
 *******************************************************************************/
 #include <iostream>
@@ -29,13 +35,32 @@ int main()
     #endif
     long long p,q,n;
     cin>>p>>q>>n;
-    long long x=0, y=0, z=0, mz=1, mx=0,my=0,mz=1;
-    long long total = 0;
-    for(long long k = 1; k <=n;++k){
-        long long cx = (x+1)*(x+2);
-        long long cy = (y+1)*(y+2);
-        long long cz = mz*p*modpow(q,MOD-2);
-        
+    long long x=1, y=1, z=0;
+    long long total = 1;
+    // cout<<"n="<<n<<endl;
+    if(1<=n)cout<<"0 ";
+    if(2<=n)cout<<"1 ";
+    for(long long k = 3; k <=n;++k){
+        double dx = double(x+2)/x;
+        double dy = double(y+2)/y;
+        double dz = (double(p)/q);
+        // cout<<"x:"<<x<<" dz:"<<dz<<endl;
+        // cout<<x<<" "<<y<<" "<<z<<"|"<<cx<<' '<<cy<<' '<<cz<<endl;
+        if(dx > dy && dx > dz){
+            total= (total*(x+2))%MOD;
+            total =(total*modpow(x,MOD-2))%MOD;
+            ++x;
+        }else{
+            if(dy > dz){
+                total= (total*(y+2))%MOD;
+                total =(total*modpow(y,MOD-2))%MOD;
+                ++y;
+            }else{
+                total= (((total*p)%MOD)*modpow(q,MOD-2))%MOD;
+                ++z;
+            }
+        }
+        cout<<total<<' ';
     }
 	return 0;
 }
