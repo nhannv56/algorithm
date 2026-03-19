@@ -2,6 +2,7 @@
 
 https://www.acmicpc.net/problem/27373
 algo: dijiktra
+TLE
 
 *******************************************************************************/
 #include <iostream>
