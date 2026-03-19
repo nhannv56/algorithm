@@ -11,23 +11,73 @@ long long T,R,C,N;
 vector<vector<int>> prefixS,prefixB, prefixR;
 string fi;
 long long cal( int i, int r,int c,const vector<string> & cake, vector<vector<vector<long long>>>& dp){
-    if(i<N && r<R && c< C){
+    if(i == N-1){
+        bool valid = true;
+        if(fi[i]=='S'){
+            if((prefixS[R-1][C-1]-prefixS[r][c] + (cake[r][c]=='S'?1:0))==0){
+                valid = false;
+            }
+        }else if(fi[i]=='B'){
+            if((prefixB[R-1][C-1]-prefixB[r][c] + (cake[r][c]=='B'?1:0))==0){
+                valid = false;
+            }
+        }else if(fi[i]=='R'){
+            if((prefixR[R-1][C-1]-prefixR[r][c] + (cake[r][c]=='R'?1:0))==0){
+                valid = false;
+            }
+        }
+        return valid?1:0;
+    }
+    if(r<R && c< C){
         if(dp[i][r][c] == -1){
             dp[i][r][c]=0;
             for(int rr = r+1; rr < R;++rr){
                 //check condition
+                bool valid = true;
                 if(fi[i]=='S'){
+                    if((prefixS[rr][C-1]-prefixS[r][c] + (cake[r][c]=='S'?1:0))==0){
+                        valid = false;
+                    }
+                }else if(fi[i]=='B'){
+                    if((prefixB[rr][C-1]-prefixB[r][c] + (cake[r][c]=='B'?1:0))==0){
+                        valid = false;
+                    }
+                }else if(fi[i]=='R'){
+                    if((prefixR[rr][C-1]-prefixR[r][c] + (cake[r][c]=='R'?1:0))==0){
+                        valid = false;
+                    }
                 }
-                dp[i][r][c]+= cal(i+1,rr,c,cake, dp);
+                if(valid){
+                    dp[i][r][c]+= cal(i+1,rr,c,cake, dp);
+                }
             }
             for(int cc = c+1; cc < C;++cc){
                 //check condition
-                dp[i][r][c]+= cal(i+1,r,cc,cake, dp);
+                bool valid = true;
+                if(fi[i]=='S'){
+                    if((prefixS[R-1][cc]-prefixS[r][c] + cake[r][c]=='S'?1:0)==0){
+                        valid = false;
+                    }
+                }else if(fi[i]=='B'){
+                    if((prefixB[R-1][cc]-prefixB[r][c] + cake[r][c]=='B'?1:0)==0){
+                        valid = false;
+                    }
+                }else if(fi[i]=='R'){
+                    if((prefixR[R-1][cc]-prefixR[r][c] + cake[r][c]=='R'?1:0)==0){
+                        valid = false;
+                    }
+                }else{
+                    valid = false;
+                }
+                if(valid){
+                    dp[i][r][c]+= cal(i+1,r,cc,cake, dp);
+                }
+               
             }
         }
         return dp[i][r][c];
     }
-    return 0;
+    return 1;
 }
 long long solve(vector<string> cake){
     vector<vector<vector<long long>>> dp(N, vector<vector<long long>>(R, vector<long long>(C,-1)));
@@ -68,6 +118,27 @@ long long solve(vector<string> cake){
             }
         }
     }
+    // cout<<"prefixS\n";
+    // for(int i = 0; i < R;++i){
+    //     for(int j = 0; j < C;++j){
+    //         cout<<prefixS[i][j]<<' ';
+    //     }
+    //     cout<<'\n';
+    // }
+    // cout<<"prefixB\n";
+    // for(int i = 0; i < R;++i){
+    //     for(int j = 0; j < C;++j){
+    //         cout<<prefixB[i][j]<<' ';
+    //     }
+    //     cout<<'\n';
+    // }
+    // cout<<"prefixR\n";
+    // for(int i = 0; i < R;++i){
+    //     for(int j = 0; j < C;++j){
+    //         cout<<prefixR[i][j]<<' ';
+    //     }
+    //     cout<<'\n';
+    // }
     return cal( 0, 0, 0, cake, dp);
 }
 int main()
