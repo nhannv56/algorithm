@@ -8,31 +8,28 @@ algo: prefix sum
 #include <iterator> // For std::next
 using namespace std;
 long long T,R,C,N;
-vector<vector<pair<int,int>>> prefixS,prefixB, prefixR;
+int  prefixS[101][101],prefixB[101][101], prefixR[101][101];
 string fi;
-long long cal( int i, int r,int c,const vector<string> & cake, vector<vector<vector<long long>>>& dp){
+long long dp[10][100][100];
+long long mod = 1e9+7;
+inline long long cal(const int& i,const int& r,const int& c,const vector<string> & cake){
+    // cout<<"i: "<<i<<" r: "<<r<<" c: "<<c<<'\n';
     if(i == N-1){
         bool valid = false;
         if(fi[i]=='S'){
-            for(auto rr : prefixS){
-                if(rr[C].second-rr[c].second > 0){
-                    valid = true;
-                    break;
-                }
+            auto countS = prefixS[R][C]-prefixS[R][c]-prefixS[r][C]+prefixS[r][c];
+            if(countS > 0){
+                valid = true;
             }
         }else if(fi[i]=='B'){
-            for(auto rr : prefixB){
-                if(rr[C].second-rr[c].second >0){
-                    valid = true;
-                    break;
-                }
+            auto countB = prefixB[R][C]-prefixB[R][c]-prefixB[r][C]+prefixB[r][c];
+            if(countB >0){
+                valid = true;
             }
         }else if(fi[i]=='R'){
-            for(auto rr : prefixR){
-                if(rr[C].second-rr[c].second >0){
-                    valid = true;
-                    break;
-                }
+            auto countR = prefixR[R][C]-prefixR[R][c]-prefixR[r][C]+prefixR[r][c];
+            if(countR >0){
+                valid = true;
             }
         }
         return valid?1:0;
@@ -43,52 +40,47 @@ long long cal( int i, int r,int c,const vector<string> & cake, vector<vector<vec
             bool validRow = false,validCol = false;
             for(int rr = r+1; rr < R;++rr){
                 //check condition
-                for(int t = r+1; t < rr+1;++t){
+                if(!validRow){
                     if(fi[i]=='S'){
-                        if(prefixS[t][C].second-prefixS[t][c].second >0){
+                        if(prefixS[rr][C]-prefixS[rr][c] - prefixS[r][C]+prefixS[r][c] >0){
                             validRow = true;
-                            break;
                         }
                     }else if(fi[i]=='B'){
-                        if(prefixB[t][C].second-prefixB[t][c].second >0){
+                        if(prefixB[rr][C]-prefixB[rr][c] - prefixB[r][C]+prefixB[r][c] >0){
                             validRow = true;
-                            break;
                         }
                     }else if(fi[i]=='R'){
-                        if(prefixR[t][C].second-prefixR[t][c].second >0){
+                        if(prefixR[rr][C]-prefixR[rr][c] - prefixR[r][C]+prefixR[r][c] >0){
                             validRow = true;
-                            break;
                         }
                     }
                 }
                
                 if(validRow){
-                    dp[i][r][c]+= cal(i+1,rr,c,cake, dp);
+                    dp[i][r][c]+= cal(i+1,rr,c,cake);
+                    dp[i][r][c]%=mod;
                 }
             }
             for(int cc = c+1; cc < C;++cc){
                 //check condition
-                for(int t = c+1; t < cc+1;++t){
+                if(!validCol){
                     if(fi[i]=='S'){
-                        if(prefixS[R][t].first-prefixS[r][t].first >0){
+                        if(prefixS[R][cc]- prefixS[r][cc]-prefixS[R][c]+prefixS[r][c] >0){
                             validCol = true;
-                            break;
                         }
                     }else if(fi[i]=='B'){
-                        if(prefixB[R][t].first-prefixB[r][t].first >0){
+                        if(prefixB[R][cc]-prefixB[r][cc] - prefixB[R][c]+prefixB[r][c] >0){
                             validCol = true;
-                            break;
                         }
                     }else if(fi[i]=='R'){
-                        if(prefixR[R][t].first-prefixR[r][t].first >0){
+                        if(prefixR[R][cc]-prefixR[r][cc] - prefixR[R][c]+prefixR[r][c] >0){
                             validCol = true;
-                            break;
                         }
                     }
                 }
-                
                 if(validCol){
-                    dp[i][r][c]+= cal(i+1,r,cc,cake, dp);
+                    dp[i][r][c]+= cal(i+1,r,cc,cake);
+                    dp[i][r][c]%=mod;
                 }               
             }
         }
@@ -96,61 +88,36 @@ long long cal( int i, int r,int c,const vector<string> & cake, vector<vector<vec
     }
     return 1;
 }
-long long solve(vector<string> cake){
-    vector<vector<vector<long long>>> dp(N, vector<vector<long long>>(R, vector<long long>(C,-1)));
-    prefixS = vector<vector<pair<int,int>>>(R+1, vector<pair<int,int>>(C+1, {0,0}));
-    prefixB = vector<vector<pair<int,int>>>(R+1, vector<pair<int,int>>(C+1, {0,0}));
-    prefixR = vector<vector<pair<int,int>>>(R+1, vector<pair<int,int>>(C+1, {0,0}));
+inline long long solve(vector<string>& cake){
+    // vector<vector<vector<long long>>> dp(N, vector<vector<long long>>(R, vector<long long>(C,-1)));
+    memset(dp, -1, sizeof(dp));
+    // prefixS = vector<vector<int>>(R+1, vector<int>(C+1, 0));
+    // prefixB = vector<vector<int>>(R+1, vector<int>(C+1, 0));
+    // prefixR = vector<vector<int>>(R+1, vector<int>(C+1, 0));
     for(int i = 1; i <=R; ++i){
         for(int j = 1; j <=C; ++j){
-            prefixS[i][j].first  =  prefixS[i-1][j].first;//prefix theo cot
-            prefixS[i][j].second =  prefixS[i][j-1].second;//theo hang
-            prefixB[i][j].first  =  prefixB[i-1][j].first;//prefix theo cot
-            prefixB[i][j].second =  prefixB[i][j-1].second;//theo hang
-            prefixR[i][j].first  =  prefixR[i-1][j].first;//prefix theo cot
-            prefixR[i][j].second =  prefixR[i][j-1].second;
+            prefixS[i][j] = prefixS[i-1][j] + prefixS[i][j-1] - prefixS[i-1][j-1];
+            prefixB[i][j] = prefixB[i-1][j] + prefixB[i][j-1] - prefixB[i-1][j-1];
+            prefixR[i][j] = prefixR[i-1][j] + prefixR[i][j-1] - prefixR[i-1][j-1];
             switch (cake[i-1][j-1])
             {
             case 'S':
-                /* code */
-                ++prefixS[i][j].first;//prefix theo cot
-                ++prefixS[i][j].second;//theo hang
+                ++prefixS[i][j];
                 break;
             case 'B':
-                ++prefixB[i][j].first;//prefix theo cot
-                ++prefixB[i][j].second;
+                ++prefixB[i][j];
                 break;
             case 'R':
-                ++prefixR[i][j].first;//prefix theo cot
-                ++prefixR[i][j].second;
+                ++prefixR[i][j];
                 break;
             default:
                 break;
-            }            
+            }
+            // cout<<"( "<<prefixS[i][j]<<" "<<prefixB[i][j]<<" "<<prefixR[i][j]<<" ), ";            
         }
+        // cout<<'\n';
     }
-    // cout<<"prefixS\n";
-    // for(int i = 0; i <= R;++i){
-    //     for(int j = 0; j <= C;++j){
-    //         cout<<'('<<prefixS[i][j].first<<", "<<prefixS[i][j].second<<") ";
-    //     }
-    //     cout<<'\n';
-    // }
-    // cout<<"prefixB\n";
-    // for(int i = 0; i < R;++i){
-    //     for(int j = 0; j < C;++j){
-    //         cout<<prefixB[i][j]<<' ';
-    //     }
-    //     cout<<'\n';
-    // }
-    // cout<<"prefixR\n";
-    // for(int i = 0; i < R;++i){
-    //     for(int j = 0; j < C;++j){
-    //         cout<<prefixR[i][j]<<' ';
-    //     }
-    //     cout<<'\n';
-    // }
-    return cal( 0, 0, 0, cake, dp);
+    return cal( 0, 0, 0, cake);
 }
 int main()
 {
@@ -161,6 +128,9 @@ int main()
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout); // Nếu bạn muốn xuất ra file luôn
     #endif
+    memset(prefixS, 0, sizeof(prefixS));
+    memset(prefixB, 0, sizeof(prefixB));
+    memset(prefixR, 0, sizeof(prefixR));
     cin>>T;
     while(T>0){
         cin>>R>>C>>N;
