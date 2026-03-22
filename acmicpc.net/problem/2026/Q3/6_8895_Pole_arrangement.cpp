@@ -21,6 +21,9 @@ long long solve(long long n, long long l, long long r){
         return 0;
     }
     // điều kiện check cho chỉ giảm n
+    //chọn l-1 phần tử bên trái C(l-1)(n-1) phần tử xếp bên trái
+    //phần tử cao nhất ở giữa
+    //bên trái không có lựa chọn
     if(l+r==n+1){
         return pre[n-1]/(pre[n -1 -(l-1)]*pre[l-1]);
     }
