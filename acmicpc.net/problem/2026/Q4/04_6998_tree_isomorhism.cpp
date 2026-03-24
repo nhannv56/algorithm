@@ -9,26 +9,36 @@ https://www.acmicpc.net/problem/6998
 
 using namespace std;
 struct Node{
+    Node* parent=nullptr;
     vector<Node*> children;
+    char val;
 };
 bool solve(const string & s1, const string & s2){
     Node * r1 = new Node();
     Node * r2 = new Node();
     //build tree
     auto cur = r1;
-    for(int i=0;i<s1.size();i+=2){
+    for(int i=0;i<s1.length();i+=2){
         if(s1[i] != '#'){
             Node * newNode = new Node();
+            newNode->val = s1[i];
+            newNode->parent = cur;
             cur->children.push_back(newNode);
             cur = newNode;
+        }else{
+            cur = cur->parent;
         }
     }
     cur = r2;
-    for(int i=0;i<s2.size();i+=2){
+    for(int i=0;i<s2.length();i+=2){
         if(s2[i] != '#'){
             Node * newNode = new Node();
+            newNode->val = s2[i];
+            newNode->parent = cur;
             cur->children.push_back(newNode);
             cur = newNode;
+        }else{
+            cur = cur->parent;
         }
     }
     // bfs 2 tree to compare
@@ -46,7 +56,7 @@ bool solve(const string & s1, const string & s2){
         while(q1.size() > 0){
             auto [d1, node1] = q1.top();
             q1.pop();
-            
+            cout<<node1->val<<" "<<d1<<"\n";
             auto [d2, node2] = q2.top();
             q2.pop();
             if(d1!=d2){
@@ -84,7 +94,7 @@ int main()
         string s1,s2;
         cin >> s1 >> s2;
         auto res = solve(s1,s2);
-        if(res){
+        if(res==false){
             cout<<"The two trees are not isomorphic.\n";
         }else{
             cout<<"The two trees are isomorphic.\n";
