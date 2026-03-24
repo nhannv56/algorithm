@@ -74,7 +74,7 @@ void solve(vector<string> & grids, string moves){
             }
         }
         robots.clear();
-		//cập nhật vị trí mới cho robot
+		//cập nhật vị trí mới cho robot chỉ sau khi tất cả các robot di chuyển xong tránh wrong grid state
         for(auto & entry: robotCount){
             if(entry.second == 1){
                 robots.push_back(entry.first);
