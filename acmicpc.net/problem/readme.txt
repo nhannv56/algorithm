@@ -1,3 +1,6 @@
+- Lưu ý:
++ khi implement -> chú ý tính independant vừa kiểm tra vừa update vùng dữ liệu có thể dẫn đến sai state
+        https://github.com/nhannv56/algorithm/edit/master/acmicpc.net/problem/2026/Q4/05_8972_roboti.cpp
 1. SegmentTree
 - Sum trên đoạn
 - Min trên đoạn
