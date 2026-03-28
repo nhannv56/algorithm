@@ -1,7 +1,9 @@
 /******************************************************************************
 
 https://www.acmicpc.net/problem/2098
-bitmask dp traveling salemans
+bitmask dp traveling sale mans
+algo: dp
+algo: tsp
 
 *******************************************************************************/
 #include <iostream>
@@ -11,13 +13,13 @@ bitmask dp traveling salemans
 using namespace std;
 int N=-1;
 int maxlen= 17*1000000;
-
 vector<vector<int>> dp = vector<vector<int>>(1<<16, vector<int>(16, -1));
 int resolve(int mask, int u, const vector<vector<int>> & cost) {    
     //cout<<"mask:"<<std::bitset<8>(mask)<<" u:"<<u<<endl;
     if(dp[mask][u] != -1){
         return dp[mask][u];
     }
+    //khoảng cách từ thành phố u -> 0
     if(mask == 1){
         if(cost[0][u] > 0){
             return cost[0][u];
