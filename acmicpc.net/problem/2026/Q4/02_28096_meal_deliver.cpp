@@ -18,6 +18,7 @@ struct POS{
 };
 //khoảng cách từ vị trí i đến j trong pos
 
+//có thể tính trước để tránh tính lại
 int dis(int i, int j, vector<POS>& pos){
     int res = 0;
     int dzij = pos[i].z - pos[j].z;
