@@ -1,7 +1,8 @@
 /***
  * https://www.acmicpc.net/problem/24756
  * TÓM TẮT ĐỀ BÀI VÀ PHƯƠNG PHÁP GIẢI: FLARIANA FLOWERS
-
+algo: dp on tree
+algo: knapsack
 ---
 1. Tóm tắt đề bài
 - Cấu trúc: N bông hoa (N <= 300) nối thành một Cây (Tree).
