@@ -1,5 +1,5 @@
 /***
- 
+ https://www.acmicpc.net/problem/24978
  */
 
 #include <iostream>
@@ -8,52 +8,59 @@
 
 using namespace std;
 
-string s1,s2;
+string s1, s2;
 int N;
-
-char solve(const string & q)
+int MAX_Q_LEN = 'r' - 'a' + 1;
+vector<vector<int>> charIndx1(MAX_Q_LEN), charIndx2(MAX_Q_LEN); //
+vector<bool> dp(1 << 19, false);
+vector<int> arr1, arr2;
+void precal(vector<int> &vt1, vector<int> &vt2, int mask = 0, int index = 0)
 {
-   char res = 'Y';
-   vector<vector<int>> preCal1('r'-'a'+1),preCal2('r'-'a'+1);
-   for(int i = 0; i < s1.length();++i){
-      preCal1[s1[i]-'a'].push_back(i);
+   if (index > 17)
+   {
+      return;
    }
-   for(int i = 0; i < s2.length();++i){
-      preCal2[s2[i]-'a'].push_back(i);
-   }
-   set<int> set1,set2;
-   for(int i = 0; i < q.length();++i){
-      // cout<<"char: "<<q[i]<<endl;
-      char c = q[i];
-      int cI = c-'a';
-      if(preCal1[cI].size() != preCal2[cI].size()){
-         return 'N';
-      }else{
-         for(int j = 0; j < preCal1[cI].size(); ++j){
-            // cout<<"preCal1: "<<preCal1[cI][j]<<" preCal2: "<<preCal2[cI][j]<<endl;
-            for(auto x: set1){
-               // cout<<"set1: "<<x<<" ";
-            }
-            for(auto x: set2){
-               // cout<<"set2: "<<x<<" ";
-            }
-            auto f1 = set1.lower_bound(preCal1[cI][j]);
-            auto f2 = set2.lower_bound(preCal2[cI][j]);
-            if(f1 == set1.end() && f2== set2.end()){
-
-            }else{
-               // cout<<"dis:"<<distance(set1.begin(),f1)<<" "<<distance(set2.begin(),f2)<<endl;
-               if(distance(set1.begin(),f1) != distance(set2.begin(),f2)){
-                  return 'N';
-               }
-            }
-            set1.insert(preCal1[cI][j]);
-            set2.insert(preCal2[cI][j]);
+   precal(vt1, vt2, mask, index + 1);
+   vector<int> target1(vt1.size() + charIndx1[index].size()), target2(vt1.size() + charIndx1[index].size());
+   int i = 0, k = 0;
+   mask |= (1 << index);
+   if (charIndx1[index].size() == charIndx2[index].size())
+   {
+      while (i < vt1.size() && k < charIndx1[index].size())
+      {
+         if (vt1[i] < charIndx1[index][k] && vt2[i] < charIndx2[index][k])
+         {
+            target1[i + k] = vt1[i];
+            target2[i + k] = vt2[i];
+            ++i;
+         }
+         else if (vt1[i] > charIndx1[index][k] && vt2[i] > charIndx2[index][k])
+         {
+            target1[i + k] = charIndx1[index][k];
+            target2[i + k] = charIndx2[index][k];
+            ++k;
+         }
+         else
+         {
+            return;
          }
       }
-      
+      // push remain item don't need compare
+      while (i < vt1.size())
+      {
+         target1[i + k] = vt1[i];
+         target2[i + k] = vt2[i];
+         ++i;
+      }
+      while (k < charIndx1[index].size())
+      {
+         target1[i + k] = charIndx1[index][k];
+         target2[i + k] = charIndx2[index][k];
+         ++k;
+      }
+      dp[mask] = true;
+      precal(target1, target2, mask, index + 1);
    }
-   return res;
 }
 int main()
 {
@@ -64,13 +71,28 @@ int main()
    freopen("input.txt", "r", stdin);
    freopen("output.txt", "w", stdout); // Nếu bạn muốn xuất ra file luôn
 #endif
-   cin >> s1 >> s2 >>N;
+   cin >> s1 >> s2 >> N;
+
+   for (int i = 0; i < s1.length(); ++i)
+   {
+      charIndx1[s1[i] - 'a'].push_back(i);
+   }
+   for (int i = 0; i < s2.length(); ++i)
+   {
+      charIndx2[s2[i] - 'a'].push_back(i);
+   }
    string q;
+   precal(arr1, arr2);
    for (int i = 0; i < N; ++i)
    {
-     cin>>q;
-     cout<<solve(q);
+      cin >> q;
+      int mask = 0;
+      for (int j = 0; j < q.length(); ++j)
+      {
+         mask |= (1 << (q[j] - 'a'));
+      }
+      cout << (dp[mask] ? 'Y' : 'N');
    }
-  
+
    return 0;
 }
