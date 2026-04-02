@@ -1,5 +1,8 @@
 /***
  https://www.acmicpc.net/problem/24978
+ algo: string
+ algo: bitmask
+ algo: merge sort
  */
 
 #include <iostream>
@@ -13,28 +16,27 @@ int N;
 int MAX_Q_LEN = 'r' - 'a' + 1;
 vector<vector<int>> charIndx1(MAX_Q_LEN), charIndx2(MAX_Q_LEN); //
 vector<bool> dp(1 << 19, false);
-vector<int> arr1, arr2;
-void precal(vector<int> &vt1, vector<int> &vt2, int mask = 0, int index = 0)
+void precal(int arr1[], int arr2[],int aSize =0, int mask = 0, int index = 0)
 {
    if (index > 17)
    {
       return;
    }
-   precal(vt1, vt2, mask, index + 1);
-   vector<int> target1(vt1.size() + charIndx1[index].size()), target2(vt1.size() + charIndx1[index].size());
+   precal(arr1, arr2, aSize, mask, index + 1);
+   int target1[aSize + charIndx1[index].size()], target2[aSize + charIndx1[index].size()];
    int i = 0, k = 0;
    mask |= (1 << index);
    if (charIndx1[index].size() == charIndx2[index].size())
    {
-      while (i < vt1.size() && k < charIndx1[index].size())
+      while (i < aSize && k < charIndx1[index].size())
       {
-         if (vt1[i] < charIndx1[index][k] && vt2[i] < charIndx2[index][k])
+         if (arr1[i] < charIndx1[index][k] && arr2[i] < charIndx2[index][k])
          {
-            target1[i + k] = vt1[i];
-            target2[i + k] = vt2[i];
+            target1[i + k] = arr1[i];
+            target2[i + k] = arr2[i];
             ++i;
          }
-         else if (vt1[i] > charIndx1[index][k] && vt2[i] > charIndx2[index][k])
+         else if (arr1[i] > charIndx1[index][k] && arr2[i] > charIndx2[index][k])
          {
             target1[i + k] = charIndx1[index][k];
             target2[i + k] = charIndx2[index][k];
@@ -46,10 +48,10 @@ void precal(vector<int> &vt1, vector<int> &vt2, int mask = 0, int index = 0)
          }
       }
       // push remain item don't need compare
-      while (i < vt1.size())
+      while (i < aSize)
       {
-         target1[i + k] = vt1[i];
-         target2[i + k] = vt2[i];
+         target1[i + k] = arr1[i];
+         target2[i + k] = arr2[i];
          ++i;
       }
       while (k < charIndx1[index].size())
@@ -59,7 +61,7 @@ void precal(vector<int> &vt1, vector<int> &vt2, int mask = 0, int index = 0)
          ++k;
       }
       dp[mask] = true;
-      precal(target1, target2, mask, index + 1);
+      precal(target1, target2, aSize + charIndx1[index].size(), mask, index + 1);
    }
 }
 int main()
@@ -82,6 +84,7 @@ int main()
       charIndx2[s2[i] - 'a'].push_back(i);
    }
    string q;
+   int arr1[s1.length()], arr2[s2.length()];
    precal(arr1, arr2);
    for (int i = 0; i < N; ++i)
    {
