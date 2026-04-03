@@ -15,7 +15,9 @@ const int INF = -1e9;
 vector<int> phoRes;
 vector<vector<int>> adj;
 vector<vector<int>> dpuvu; //min u->v ... ->v -> u
+vector<vector<int>> dpsigPath; //min u->v ... qua 1 đường đi duy nhất
 vector<bool>visited;
+vector<bool> havePho;
 pair<int, bool> cal(int u,int vi){
    int v= adj[u][vi];
    // cout<<"from "  << u<< " to "<<v<<endl;
@@ -26,8 +28,7 @@ pair<int, bool> cal(int u,int vi){
    int res = 2;
    visited[u]= true;
    visited[v]= true;
-   auto it = find(phoRes.begin(), phoRes.end(),v);
-   bool phoFromV = (it != phoRes.end());
+   bool phoFromV = havePho[v];
    int i = 0;
    for(auto vv : adj[v]){
       // cout<<"next:"<<vv<<" visit:"<<visited[vv]<<endl;
@@ -52,7 +53,10 @@ pair<int, bool> cal(int u,int vi){
 int cal2(int u){
    int dres = 0,res = INT_MAX;
    for(int i = 0; i <dpuvu[u].size();++i){
-      dres+=dpuvu[u][i];
+      int v = adj[u][i];
+      if(!visited[v]){
+         dres+=dpuvu[u][i];
+      }
    }
    int sigPath = 0;
    visited[u] = true;
@@ -62,18 +66,28 @@ int cal2(int u){
          continue;
       }
       visited[v] = true;
-      sigPath = cal2(v)+1;
-      cout<<"sigPath "<<u<<" to "<<v<<" is "<<sigPath<<endl;
+      if(dpsigPath[u][i] != -1){
+         // cout<<"reuse\n";
+         sigPath = dpsigPath[u][i];
+      }else{
+         sigPath = cal2(v)+1;
+         dpsigPath[u][i] = sigPath;
+      }
+      // cout<<"sigPath "<<u<<" to "<<v<<" is "<<sigPath<<endl;
       res = min(dres-dpuvu[u][i]+sigPath,res);
       visited[v] = false;
    }
    visited[u] = false;
+   if(res == INT_MAX){
+      return 0;
+   }
    return res;
 }
 int solve(){
    int res = INT_MAX;
    //tính min đi từ u ->v ... ->v ->u qua tất cả các điểm yêu cầu
    visited.resize(N, false);
+   
    for(int i = 0; i < M; ++i){
       // cout<<"cal "<<phoRes[i]<<endl;
       fill(visited.begin(),visited.end(),false);
@@ -104,10 +118,12 @@ int main()
    phoRes.resize(M);
    adj.resize(N );
    dpuvu.resize(N );
-
+   dpsigPath.resize(N );
+   havePho.resize(N, false);
    for (int i = 0; i < M; ++i)
    {
       cin>>phoRes[i];
+      havePho[phoRes[i]] = true;
    }
    sort(phoRes.begin(), phoRes.end());
    for (int i = 0; i < N-1 ; ++i)
@@ -120,6 +136,7 @@ int main()
    for(int i = 0; i < N; ++i){
       sort(adj[i].begin(), adj[i].end());
       dpuvu[i].resize(adj[i].size(), -1);
+      dpsigPath[i].resize(adj[i].size(), -1);
    }
    cout<<solve();
    return 0;
