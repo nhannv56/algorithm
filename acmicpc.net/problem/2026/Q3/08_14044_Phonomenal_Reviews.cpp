@@ -49,15 +49,44 @@ pair<int, bool> cal(int u,int vi){
    // cout<<u<<" to "<<adj[u][vi]<<" dis:"<<dpuvu[u][vi]<<endl;
    return {dpuvu[u][vi], phoFromV};
 }
+int cal2(int u){
+   int dres = 0,res = INT_MAX;
+   for(int i = 0; i <dpuvu[u].size();++i){
+      dres+=dpuvu[u][i];
+   }
+   int sigPath = 0;
+   visited[u] = true;
+   for(int i = 0; i <adj[u].size();++i){
+      int v = adj[u][i];
+      if(visited[v] || dpuvu[u][i] <= 0){
+         continue;
+      }
+      visited[v] = true;
+      sigPath = cal2(v)+1;
+      cout<<"sigPath "<<u<<" to "<<v<<" is "<<sigPath<<endl;
+      res = min(dres-dpuvu[u][i]+sigPath,res);
+      visited[v] = false;
+   }
+   visited[u] = false;
+   return res;
+}
 int solve(){
    int res = INT_MAX;
    //tính min đi từ u ->v ... ->v ->u qua tất cả các điểm yêu cầu
    visited.resize(N, false);
    for(int i = 0; i < M; ++i){
-      cout<<"cal "<<phoRes[i]<<endl;
+      // cout<<"cal "<<phoRes[i]<<endl;
       fill(visited.begin(),visited.end(),false);
       for(int j = 0; j < adj[phoRes[i]].size();++j){
          cal(phoRes[i],j);
+      }
+   }
+   for(int i = 0; i < M; ++i){
+      // cout<<"cal "<<phoRes[i]<<endl;
+      fill(visited.begin(),visited.end(),false);
+      auto curRes = cal2(phoRes[i]);
+      if(curRes > 0){
+         res=min(res,curRes);
       }
    }
    return res;
