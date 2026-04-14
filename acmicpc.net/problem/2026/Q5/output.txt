@@ -1,2 +1,10 @@
-3
-impossible
+Test case #1: 2
+
+Test case #2: 4
+
+Test case #3: 0
+
+Test case #4: 2
+
+Test case #5: 40
+
