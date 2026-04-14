@@ -9,10 +9,10 @@ divide
 #include <bits/stdc++.h>
 #include <iterator> // For std::next
 using namespace std;
+vector<long long> countArr(1e7 + 1, 0);
 long long solve(vector<long long> &arr)
 {
     long long count = 0;
-    vector<long long> countArr(1e7 + 1, 0);
     vector<long long> uniqueArr;
     for (int i = 0; i < arr.size(); ++i)
     {
@@ -42,6 +42,7 @@ long long solve(vector<long long> &arr)
             }
         }
     }
+    for (int d : uniqueArr) countArr[d] = 0;
     return count;
 }
 int main()
