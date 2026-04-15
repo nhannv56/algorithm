@@ -1,6 +1,11 @@
 /***
 https://www.acmicpc.net/problem/1016
+algo: math
+algo: sieve of eratosthenes sàng
 
+tìm các số không phải dạng a*a*b và >=min & <=mã
+dùng sàng a*a 1e6
+chạy b theo biên
 **/
 #include <iostream>
 #include <bits/stdc++.h>
@@ -17,18 +22,27 @@ int main()
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout); // Nếu bạn muốn xuất ra file luôn
 #endif
-    long long mi,ma;
-    cin>>mi>>ma;
+    long long mi, ma;
+    cin >> mi >> ma;
     long long maxNum = sqrt(ma);
     long long sNum = 0;
-    for(long long num = mi; num <= ma; ++num){
-        for(int d =2; d <= maxNum;++d){
-            if(num %(d*d)== 0){
-                sNum++;
-                break;
+    long long count = 0;
+    vector<bool> visited(ma - mi + 2, false);
+    for (long long c = 2; c <= maxNum; ++c)// range bình phương
+    {
+        long long cc = c * c;//tính bình phương
+        long long i = mi / cc;
+        for (; i * cc <= ma; ++i)//dùng sàng tính c*c*i
+        {
+            // cout<<"at:"<<i * cc<<" "<<i * cc -mi<<endl;
+            if (i * cc >= mi && !visited[i * cc - mi])
+            {
+                ++count;
+                visited[i * cc - mi] = true;
             }
         }
     }
-    cout<<ma-mi+1-sNum;
+
+    cout << ma - mi + 1 - count;
     return 0;
 }
