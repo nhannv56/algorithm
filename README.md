@@ -21,3 +21,5 @@
 
 6. bfs/dfs
 7. dijiktra
+
+8.Parametric Search
