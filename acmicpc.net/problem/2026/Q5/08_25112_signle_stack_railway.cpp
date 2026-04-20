@@ -4,6 +4,17 @@ algo: binary search
 algo: segment tree sum
 Dùng segment tree để tính sum của đoạn trái sang phải và phải sang trái
 dùng binary seach để tìm kiếm điểm tối ưu do tổng không đổi nên l nhỏ -> dịch phải, r nhỏ dịch trái
+
+Case 1
+5	4	3	2	1	0
+0	1	2	3	4	5
+0	20	70	40	80	50
+20	70	40	80	50	0
+					
+					
+0	20	90	130	210	260
+260	240	170	130	50	0
+
 **/
 #include <iostream>
 #include <bits/stdc++.h>
