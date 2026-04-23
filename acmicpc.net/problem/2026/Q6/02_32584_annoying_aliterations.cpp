@@ -3,6 +3,10 @@
 https://www.acmicpc.net/problem/12055
 algo:trie
 algo:tree
+Xây dựng một cây trie từ các chuỗi đã cho. 
+Với mỗi node trong cây, lưu trữ độ dài lớn nhất của chuỗi đi qua node đó. 
+Khi thêm một chuỗi mới vào cây, cập nhật độ dài lớn nhất và kiểm tra xem có thể tạo thành một cặp chuỗi nào đó có cùng tiền tố hay không.
+Nếu có, cập nhật kết quả với tổng độ dài của hai chuỗi đó.
 
 *******************************************************************************/
 #include <iostream>
@@ -16,11 +20,13 @@ struct Trie
     char _c;
     long long maxLen;
     vector<Trie *> next;
+    bool isEnd;
     Trie(char c)
     {
         _c = c;
         maxLen = 0;
         next = vector<Trie *>(26, nullptr);
+        isEnd = false;
     }
 };
 void add(Trie *node, const string &s, long long &len, long long index = 0)
@@ -32,20 +38,25 @@ void add(Trie *node, const string &s, long long &len, long long index = 0)
         if (node->next[iW] == nullptr)
         {
             auto cur = new Trie(s[index]);
-            node->next[iW] = cur;
-            //case:
-            //aa
-            //aabb
-            if(cnt>1){
-                len = max(len, (long long)s.length()-index);
+            if(index == s.length() - 1){
+                cur->isEnd = true;
             }
+            node->next[iW] = cur;
+            
         }        
+        //case:
+        //aa
+        //aabb
+        //abbbe
+        if(node->next[iW]->isEnd){
+            len = max(len, (long long)s.length()-index-1);
+        }
         node->next[iW]->maxLen = max(node->next[iW]->maxLen, (long long)s.length() - index);
-        // for(long long i = 0; i < 26; ++i){
-        //     if(i != iW && node->next[i]!= nullptr){
-        //         len = max(len, node->next[iW]->maxLen + node->next[i]->maxLen);
-        //     }
-        // }
+        for(long long i = 0; i < 26; ++i){
+            if(i != iW && node->next[i]!= nullptr){
+                len = max(len, node->next[iW]->maxLen + node->next[i]->maxLen);
+            }
+        }
         // case:
         // aaabbb
         // aaa
@@ -54,23 +65,6 @@ void add(Trie *node, const string &s, long long &len, long long index = 0)
         }
         node = node->next[iW];
         ++index;
-    }
-}
-void dpOntree(Trie *node, long long &len)
-{
-    for (long long i = 0; i < 26; ++i)
-    {
-        if (node->next[i] != nullptr)
-        {
-            dpOntree(node->next[i], len);
-            for (long long j = i + 1; j < 26; ++j)
-            {
-                if (node->next[j] != nullptr)
-                {
-                    len = max(len, node->next[i]->maxLen + node->next[j]->maxLen);
-                }
-            }
-        }
     }
 }
 int main()
@@ -92,7 +86,7 @@ int main()
         ++cnt;
         add(root, s, res);
     }
-    dpOntree(root, res);
+    // dpOntree(root, res);
     cout << res;
     return 0;
 }
