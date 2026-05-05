@@ -1,6 +1,11 @@
-
+/**
+algo: prefix sum
+algo: precompute
+tính chi phí di  chuyển a->b
+tính trước chi phí dùng prefix sum trái qua phải, phải qua trái
+min chi phí gần nhau giữa 2 điểm là closet -> max là adj
+*/
 class Solution {
-//https://leetcode.com/problems/minimum-cost-to-move-between-indices/
 public:
     vector<int> minCost(vector<int>& nums, vector<vector<int>>& queries) {
         vector<int> indices(nums.size(), 0);
@@ -21,21 +26,34 @@ public:
             }
             indices[i]= closestI;
         }
-        for(auto it : indices){
-            cout<<it<<" ";
+        // for(auto it : indices){
+        //     cout<<it<<" ";
+        // }cout<<endl;
+        vector<int> res,pre1(nums.size(),0),pre2(nums.size(),0);
+        for(int i = 1; i < indices.size();++i){
+            if(indices[i-1]==i){
+                 pre1[i]=pre1[i-1]+1;
+            }else{
+                 pre1[i]=pre1[i-1]+abs(nums[i-1]-nums[i]);
+            }
+            //cout<<pre1[i]<<" ";
+        }//cout<<endl;
+        for(int i = indices.size()-2; i >= 0; --i){
+            if(indices[i+1]==i){
+                pre2[i] = pre2[i+1]+1;
+            }else{
+                pre2[i]=pre2[i+1]+abs(nums[i+1]-nums[i]);
+            }
         }
-        vector<int> res;
-        for(auto [l,r]: queries){
-            bool visits[nums.size()]={false,};
-            deque<pair<int,int> dq;
-            dq.push_back({l,0});
-            res.push_back(abs(nums[l]-nums[r]));
-            while(!dq.empty()){
-                auto [i,dis] = dq.front(); dq.pop_front();
-                if(!visits[i]){
-                    visits[i] = true;
-
-                }
+        for(auto q : queries){
+            auto l=q[0], r=q[1];
+            int qres = 0;
+            if(l == r){
+                res.push_back(0);
+            }else if (l < r){
+                res.push_back(pre1[r]-pre1[l]);
+            }else{
+                res.push_back(pre2[r]-pre2[l]);
             }
         }
         return res;
