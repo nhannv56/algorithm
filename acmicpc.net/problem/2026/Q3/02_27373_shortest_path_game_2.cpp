@@ -1,7 +1,7 @@
 /******************************************************************************
 
 https://www.acmicpc.net/problem/27373
-algo: dijiktra
+algo: floyd
 TLE
 
 *******************************************************************************/
@@ -60,7 +60,7 @@ int score(deque<Edge>& edges, vector<vector<int>> dist){
     return floydWarshall(N, dist);
     // return total;
 }
-//dijiktra tìm khoảng cách trước-> tổng
+//floyd tìm khoảng cách trước-> tổng
 //thêm/xóa 1 cạnh -> cạnh đó ảnh hưởng tới bao nhieu path 
 void add(int u, int v, int w,deque<Edge>& edges){
     total=0;

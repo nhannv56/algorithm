@@ -43,7 +43,6 @@ void floydWarshall(long long n, vector<vector<long long>>& dist /*, vector<vecto
 long long score(stack<long long>& totals){
     return totals.top();
 }
-//dijiktra tìm khoảng cách trước-> tổng
 //thêm/xóa 1 cạnh -> cạnh đó ảnh hưởng tới bao nhieu path 
 void add(long long u, long long v, long long w,stack<Edge>& edges, stack<vector<vector<long long>>>& st,stack<long long>& totals){
     total = totals.top();

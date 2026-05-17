@@ -4,7 +4,7 @@ https://www.acmicpc.net/problem/1162
 Dynamic Programming
 Graph Theory
 Shortest Path
-Dijkstra's
+algo: Dijkstra's
 
 *******************************************************************************/
 #include <iostream>

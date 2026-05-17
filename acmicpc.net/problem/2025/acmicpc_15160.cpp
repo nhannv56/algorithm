@@ -1,5 +1,7 @@
 /**
   graph, dijktra, shortest path, bfs 0-1
+  algo: dijktra
+  algo: graph
 */
 #include<iostream>
 #include<vector>
