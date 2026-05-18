@@ -1,6 +1,6 @@
 /***
   https://leetcode.com/problems/maximum-subarray/description/
-  algo: kanda's algorithm
+  algo: kandanes's algorithm
   algo: dp (minVal is dp at[i-1] max sub array ket thuc taij i-1
   **/
 class Solution {
