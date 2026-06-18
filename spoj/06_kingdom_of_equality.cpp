@@ -2,6 +2,11 @@
 
 https://spoj.com/problems/KEQUALITY/
 algo: bfs
+Strategy: Lưu dưới dạng cây
+mảng label đánh dấu các cây -> đánh dấu thế nào ?
+mảng level của phần tử trong cây
+mảng parent -> cha của phần tử trong cây
+mảng count -> chứa số con của phần tử đó
 *******************************************************************************/
 #include <iostream>
 #include <bits/stdc++.h>
