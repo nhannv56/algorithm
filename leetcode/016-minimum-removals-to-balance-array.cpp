@@ -1,37 +1,26 @@
 /**
-https://leetcode.com/problems/minimum-removals-to-balance-array/?envType=daily-question&envId=2026-07-04
 algo: sliding window
+https://leetcode.com/problems/minimum-removals-to-balance-array/?envType=daily-question&envId=2026-07-04
 **/
 
 class Solution {
 public:
-    int minRemoval(vector<int>& nums, long long k) {
-        map<long long, int> m;
-        for (int n : nums) {
-            if (m.find(n) == m.end()) {
-                m[n] = 1;
-            } else {
-                m[n]++;
-            }
-        }
+    int minRemoval(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
         int res = nums.size();
-        auto l = m.begin(), r = m.begin();
-        int count = 0;
-        while (r != m.end()) {
-            // cout<<"loop"<<endl;
-            
-            while (l->first * k < r->first) {
-                count -= l->second;
-                // cout<<l->first<<" "<<r->first<<endl<< " count:"<<count<<endl;
-                res = min(res, (int)nums.size() - count);
+        auto l = 0, r = 0;
+        while (r < nums.size()) {
+            while ((long long)((long long)nums[l] * (long long)k) < (long long)nums[r]) {
+                // res = min(res, (int)nums.size() - (r - l + 1));
+                // cout<<l<<" "<<r<<" "<<res<<endl;
                 ++l;
-            }        
-            while (r != m.end() && r->first <= l->first * k) {
-                count += r->second;
-                // cout<<l->first<<" "<<r->first<<endl<< " count:"<<count<<endl;
-                res = min(res, (int)nums.size() - count);
+            }
+            while (r < nums.size() && (long long)((long long)nums[l] * (long long)k) >= (long long)nums[r]) {
+                res = min(res, (int)nums.size() - (r - l + 1));
+                // cout<<l<<" "<<r<<" "<<res<<endl;
                 ++r;
-            }    
+            }
+            
         }
         return res;
     }
