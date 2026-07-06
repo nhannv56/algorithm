@@ -2,6 +2,7 @@
 algo: sorting
 https://leetcode.com/problems/remove-covered-intervals/?envType=daily-question&envId=2026-07-06
 tìm xem có bao nhiêu đoạn nằm trong các đoạn khác
+trả về số đoạn không nằm hoàn toàn trong đoạn khác
 **/
 class Solution {
     class Node{
