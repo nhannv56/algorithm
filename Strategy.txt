@@ -1,0 +1,295 @@
+================================================================================
+  START POINT: DẤU HIỆU → THUẬT TOÁN NÊN ÁP DỤNG
+================================================================================
+
+──────────────────────────────────────────────────────────────────────────────
+GRAPH / ĐỒ THỊ
+──────────────────────────────────────────────────────────────────────────────
+
+[BFS]
+  - Tìm đường đi ngắn nhất trên đồ thị KHÔNG có trọng số (mỗi cạnh = 1)
+  - Duyệt theo từng bậc (layer-by-layer)
+  - Flood fill trên lưới, tìm khoảng cách nhỏ nhất trên ma trận
+  - Multi-source BFS: nhiều điểm nguồn cùng lúc
+
+[DFS]
+  - Duyệt toàn bộ cây/đồ thị, không cần thứ tự khoảng cách
+  - Tìm tất cả đường đi, kiểm tra liên thông
+  - Tính subtree, duyệt con trên cây
+
+[Dijkstra]
+  - Đồ thị có trọng số DƯƠNG, tìm đường đi ngắn nhất từ 1 nguồn
+  - Trọng số cạnh khác nhau, không có cạnh âm
+  - → Dùng min-heap + relaxation
+
+[Floyd-Warshall]
+  - Tìm đường đi ngắn nhất giữa TẤT CẢ cặp đỉnh
+  - N nhỏ (N ≤ 500)
+  - Có thể có cạnh âm (không có chu trình âm)
+
+[Bellman-Ford / SPFA]
+  - Đồ thị có cạnh âm
+  - Kiểm tra chu trình âm
+  - N vừa, E nhỏ
+
+[Topological Sort]
+  - Đồ thị có hướng không có chu trình (DAG)
+  - Thứ tự thực hiện công việc có phụ thuộc nhau
+  - "Task A phải làm trước Task B"
+
+[Minimum Spanning Tree - Kruskal / Prim]
+  - Kết nối tất cả đỉnh với chi phí nhỏ nhất
+  - Đồ thị vô hướng có trọng số
+  - Kruskal: E nhỏ; Prim: V nhỏ / đồ thị dày
+
+[Bipartite Graph]
+  - Kiểm tra có thể tô 2 màu không
+  - Bài toán matching 2 nhóm (người - công việc, trái - phải)
+  - Đồ thị không có chu trình lẻ
+
+──────────────────────────────────────────────────────────────────────────────
+TREE / CÂY
+──────────────────────────────────────────────────────────────────────────────
+
+[Binary Lifting / LCA]
+  - Tìm tổ tiên chung gần nhất của 2 đỉnh trên cây
+  - Tính khoảng cách giữa 2 đỉnh trên cây
+  - Tìm tổ tiên thứ k
+
+[Tree DP / Knapsack on Tree]
+  - Bài toán tối ưu trên cây: chọn tập đỉnh/cạnh thỏa ràng buộc
+  - Kết quả subtree ảnh hưởng lẫn nhau
+  - DP tính từ lá → gốc
+
+[Euler Tour / DFS Order]
+  - Truy vấn trên subtree (sum/min/max của cả cây con)
+  - Kết hợp Segment Tree / BIT để cập nhật subtree
+  - Flatten cây thành mảng 1D
+
+──────────────────────────────────────────────────────────────────────────────
+DATA STRUCTURES / CẤU TRÚC DỮ LIỆU
+──────────────────────────────────────────────────────────────────────────────
+
+[Segment Tree]
+  - Cần cả range query VÀ point update
+  - Sum / Min / Max / Count trên đoạn [l,r]
+  - Có lazy propagation khi cần range update
+
+[Fenwick Tree / BIT]
+  - Prefix sum có cập nhật điểm
+  - Đơn giản hơn Segment Tree, bộ nhớ ít hơn
+  - Đếm inversion, rank
+
+[Sparse Table / RMQ]
+  - Range min/max KHÔNG cập nhật (static)
+  - Cần O(1) mỗi truy vấn
+  - Thường đi kèm LCA
+
+[Prefix Sum]
+  - Truy vấn sum(l,r) nhiều lần, không cập nhật
+  - Tổng 2D trên ma trận
+  - Đếm điều kiện trong đoạn
+
+[Monotonic Stack / Queue]
+  - Tìm "phần tử lớn/nhỏ hơn gần nhất" bên trái/phải
+  - Sliding window min/max
+  - Bài toán histogram, largest rectangle in histogram
+  - Bài toán có dạng: "với mỗi i, tìm j gần nhất thỏa a[j] > a[i]"
+
+[Trie Tree]
+  - Tìm kiếm / đếm chuỗi theo tiền tố
+  - Autocomplete, IP routing
+  - XOR max/min (binary trie)
+
+[Union-Find / DSU]
+  - Kiểm tra 2 phần tử có cùng nhóm không
+  - Gộp nhóm động
+  - MST (Kruskal), kiểm tra liên thông
+
+[Priority Queue / Heap]
+  - Liên tục lấy phần tử lớn nhất / nhỏ nhất
+  - Event processing theo độ ưu tiên
+  - Dùng trong Dijkstra, Prim, greedy
+
+──────────────────────────────────────────────────────────────────────────────
+DYNAMIC PROGRAMMING
+──────────────────────────────────────────────────────────────────────────────
+
+[DP (Dynamic Programming)]
+  - Câu hỏi: "số cách", "chi phí nhỏ nhất", "giá trị lớn nhất", "có thể không"
+  - Bài toán có optimal substructure + overlapping subproblems
+  - Trạng thái mô tả bằng vài tham số (i, j, k...)
+
+[Bitmask DP]
+  - N ≤ 20, trạng thái là tập con của N phần tử
+  - Bài toán thăm tất cả địa điểm (TSP)
+  - Gán nhãn / phân công N phần tử vào nhóm
+
+[Interval DP]
+  - Bài toán trên đoạn con [i,j] của mảng
+  - "Kết quả [i,j] = hàm của [i,k] và [k+1,j]"
+  - Matrix chain, balloon burst, palindrome
+
+[LCS (Longest Common Subsequence)]
+  - So khớp 2 chuỗi, tìm chuỗi con chung dài nhất
+  - Edit distance, DNA matching
+  - dp[i][j] phụ thuộc dp[i-1][j-1], dp[i-1][j], dp[i][j-1]
+
+[LIS (Longest Increasing Subsequence)]
+  - Tìm dãy con tăng dài nhất
+  - Bài toán xếp chồng (boxes, cards)
+  - patience sorting
+
+[Matrix Exponentiation]
+  - Recurrence tuyến tính, n rất lớn (n ≤ 10^18)
+  - Fibonacci, đếm đường đi độ dài n trên đồ thị
+  - Công thức V(n) = M * V(n-1)
+
+──────────────────────────────────────────────────────────────────────────────
+SEARCH / TÌM KIẾM
+──────────────────────────────────────────────────────────────────────────────
+
+[Binary Search]
+  - Mảng đã sắp xếp, tìm phần tử
+  - Hàm có tính đơn điệu: f(x) thỏa → f(x+1) thỏa
+
+[Parametric Search (Binary Search on Answer)]
+  - "Tìm giá trị nhỏ nhất/lớn nhất sao cho bài toán có thể giải"
+  - Feasibility check có tính đơn điệu theo tham số
+  - VD: "tối thiểu thời gian", "tối đa tải trọng"
+
+[Backtracking]
+  - Liệt kê TẤT CẢ tổ hợp/hoán vị thỏa điều kiện
+  - N nhỏ, không gian trạng thái vừa
+  - Có thể cắt nhánh (pruning) sớm
+
+──────────────────────────────────────────────────────────────────────────────
+POINTER / WINDOW
+──────────────────────────────────────────────────────────────────────────────
+
+[Two Pointer / Sliding Window]
+  - Tìm đoạn con [l,r] thỏa điều kiện
+  - Điều kiện đơn điệu: mở rộng thỏa → thu hẹp không thỏa
+  - Mảng đã sắp xếp, tìm cặp thỏa tổng/tích
+
+[Sweep Line]
+  - Tập hợp các khoảng (intervals), hình chữ nhật
+  - Xử lý sự kiện theo tọa độ x / thời gian
+  - Thường kết hợp Segment Tree / set / heap
+
+──────────────────────────────────────────────────────────────────────────────
+MATH / TOÁN HỌC
+──────────────────────────────────────────────────────────────────────────────
+
+[Sieve of Eratosthenes]
+  - Tìm tất cả số nguyên tố đến N
+  - Phân tích nhân tử nguyên tố
+  - Bài toán liên quan bội số, ước số
+
+[Modular Arithmetic / Fermat's Little Theorem]
+  - Kết quả rất lớn, yêu cầu lấy mod 10^9+7
+  - Tính nghịch đảo modulo (modular inverse)
+  - Tính C(n,k) mod p với n lớn
+
+[Combinatorics]
+  - Đếm số cách chọn / sắp xếp
+  - "Có bao nhiêu cách...", đường đi trên lưới
+  - Stars and bars, Pascal's triangle
+
+[Inclusion-Exclusion (Bao hàm - Loại trừ)]
+  - Đếm phần tử thỏa ÍT NHẤT / NHIỀU NHẤT k điều kiện
+  - N điều kiện nhỏ (≤ 20), kết hợp bitmask
+  - Đếm với nhiều ràng buộc chồng chéo
+
+[Game Theory / Sprague-Grundy / Nim]
+  - 2 người chơi lần lượt, người không đi được là thua
+  - Tổ hợp nhiều trò chơi độc lập
+  - Tính Grundy number cho mỗi trạng thái
+
+──────────────────────────────────────────────────────────────────────────────
+OTHER / KHÁC
+──────────────────────────────────────────────────────────────────────────────
+
+[Greedy]
+  - Chọn tối ưu cục bộ tại mỗi bước → tối ưu toàn cục
+  - Có thể chứng minh bằng exchange argument
+  - Thường sắp xếp trước rồi duyệt
+
+[Divide and Conquer]
+  - Bài toán chia được thành 2 phần ĐỘC LẬP
+  - Merge sort, closest pair of points
+  - Kết quả = hàm của 2 nửa
+
+[Geometry]
+  - Bài toán với điểm, đoạn thẳng, đa giác
+  - Tính diện tích (shoelace), giao điểm, convex hull
+  - Cross product để kiểm tra hướng quay
+
+[Kadane's Algorithm]
+  - Tìm subarray liên tiếp có tổng lớn nhất / nhỏ nhất
+  - Bài toán "maximum subarray sum", "maximum absolute sum"
+  - Biến thể: maximum product subarray (lưu cả max dương và min âm)
+
+[Knapsack DP (0/1 Knapsack)]
+  - Chọn tập con vật phẩm sao cho tổng trọng lượng ≤ W, tối đa giá trị
+  - "Có thể đạt tổng S không?", "Số cách chọn sao cho tổng = S"
+  - Biến thể: unbounded knapsack, bounded knapsack
+
+[GCD / Euclidean Algorithm]
+  - Tìm ước chung lớn nhất, bội chung nhỏ nhất
+  - Bài toán chia hết, phân số tối giản, kiểm tra tỉ lệ
+  - Xây dựng đồ thị dựa trên GCD (các đỉnh liên thông nếu GCD > 1)
+
+[Pigeonhole Principle]
+  - N+1 vật phẩm vào N ngăn → ít nhất 1 ngăn có ≥ 2 vật
+  - Chứng minh tồn tại một cặp trùng/collision
+  - Kết hợp binary search: nếu [0..mid] có > mid+1 phần tử → collision ở nửa trái
+
+[Merge Sort]
+  - Sắp xếp ổn định (stable sort) O(N log N)
+  - Đếm inversion pairs: số cặp (i,j) với i<j mà a[i]>a[j]
+  - Chia đôi, sort từng nửa, merge lại và đếm inversions
+
+[Tree Isomorphism]
+  - Kiểm tra 2 cây có cùng cấu trúc (isomorphic) không
+  - So sánh cây không theo nhãn đỉnh mà theo hình dạng
+  - Bài toán nhận dạng / phân loại cây
+
+[Coordinate Compression]
+  - Giá trị tọa độ lớn (10^9) nhưng số lượng điểm ít (≤ 10^5)
+  - Cần dùng Segment Tree / BIT nhưng index quá lớn để cấp phát trực tiếp
+  - Bài toán trên mảng với giá trị phân tán rộng
+
+================================================================================
+QUICK CHEATSHEET: ĐỌC ĐỀ → PHÂN LOẠI NHANH
+================================================================================
+
+N ≤ 12          → Bitmask DP / Backtracking / Brute force
+N ≤ 20          → Bitmask DP / Meet in the middle
+N ≤ 500         → O(N³) Floyd-Warshall / Interval DP / LCS
+N ≤ 5000        → O(N²) DP / O(N² log N)
+N ≤ 10^5        → O(N log N): Segment Tree, BIT, Dijkstra, Binary Search
+N ≤ 10^6        → O(N) hoặc O(N log N): Two Pointer, BFS, Prefix Sum, Sieve
+N ≤ 10^18       → O(log N): Binary Search, Matrix Exponentiation, Math
+
+Đồ thị không trọng số  → BFS (shortest path)
+Đồ thị trọng số dương  → Dijkstra
+Đồ thị trọng số âm     → Bellman-Ford
+All-pairs shortest path → Floyd-Warshall (N ≤ 500)
+
+Truy vấn đoạn + update  → Segment Tree / BIT
+Truy vấn đoạn (static)  → Sparse Table O(1)
+Truy vấn subtree        → Euler Tour + Segment Tree
+
+Chuỗi + tiền tố         → Trie
+2 chuỗi khớp nhau       → LCS / DP
+Chuỗi palindrome        → Manacher / DP
+
+Tập hợp rời nhau        → Union-Find
+Kết nối rẻ nhất         → MST (Kruskal / Prim)
+Thứ tự phụ thuộc        → Topological Sort
+
+"Tìm MIN/MAX thỏa điều kiện" → Binary Search on Answer (Parametric Search)
+"Đếm số cách"           → DP / Combinatorics / Inclusion-Exclusion
+"Tồn tại hay không"     → BFS/DFS / DP (bool)
+"Trò chơi 2 người"      → Game Theory / Grundy Number
