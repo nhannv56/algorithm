@@ -1,5 +1,5 @@
 /**
-algo: dp
+algo: dp trên lưới, dp on grid
 algo: tìm đường đi trên lưới nhiều lựa chọn
 Đi từ N-1,N-1 đến 0, 0
 tìm đường đi có sum lớn nhất
