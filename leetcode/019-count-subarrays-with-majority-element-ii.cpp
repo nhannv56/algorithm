@@ -1,4 +1,5 @@
 /**
+https://leetcode.com/problems/count-subarrays-with-majority-element-ii/editorial/?envType=daily-question&envId=2026-07-06
 You are given an integer array nums and an integer target.
 
 Return the number of subarrays of nums in which target is the majority element.
