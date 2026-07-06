@@ -1,0 +1,46 @@
+BFS (Breadth-First Search)           → đường đi ngắn nhất đồ thị không trọng số, flood fill lưới, liên thông
+DFS (Depth-First Search)             → duyệt cây/đồ thị, kiểm tra liên thông, tính subtree
+Dijkstra                             → đường đi ngắn nhất 1 nguồn, đồ thị trọng số dương
+Floyd-Warshall                       → đường đi ngắn nhất mọi cặp đỉnh, N ≤ 500
+Bellman-Ford                         → đường đi ngắn nhất có cạnh âm, phát hiện chu trình âm
+Topological Sort                     → thứ tự xử lý trên DAG, bài toán phụ thuộc công việc
+Minimum Spanning Tree (Kruskal/Prim) → kết nối tất cả đỉnh chi phí nhỏ nhất
+Bipartite Graph / Graph Coloring     → tô 2 màu đồ thị, bài toán matching 2 nhóm
+Binary Lifting / LCA                 → tổ tiên chung gần nhất, khoảng cách 2 đỉnh trên cây
+Tree DP / Knapsack on Tree           → tối ưu hóa trên cây, chọn tập đỉnh thỏa ràng buộc
+Euler Tour / DFS Order on Tree       → chuyển truy vấn subtree thành range query trên mảng
+Segment Tree                         → range query + point/range update (tổng, min, max đoạn)
+Fenwick Tree / BIT                   → prefix sum có cập nhật điểm, đếm inversion
+Sparse Table / RMQ                   → range min/max tĩnh không cập nhật, O(1) query
+Prefix Sum                           → tổng đoạn nhiều lần không cập nhật, tổng 2D
+Monotonic Stack / Queue              → phần tử gần nhất lớn/nhỏ hơn, sliding window min/max
+Trie Tree                            → tìm kiếm chuỗi theo tiền tố, XOR max, IP routing
+Union-Find (DSU)                     → nhóm liên thông động, Kruskal MST, gộp tập hợp
+Priority Queue / Heap                → lấy min/max liên tục, Dijkstra, xử lý sự kiện ưu tiên
+Dynamic Programming (DP)             → đếm số cách, tối ưu chi phí, bài toán có overlapping subproblems
+Bitmask DP / TSP                     → N ≤ 20, trạng thái là tập con, thăm tất cả địa điểm
+Interval DP                          → tối ưu trên đoạn con [i,j]: matrix chain, balloon burst
+LCS (Longest Common Subsequence)     → dãy con chung dài nhất 2 chuỗi, edit distance
+LIS (Longest Increasing Subsequence) → dãy con tăng dài nhất, xếp chồng hộp
+Matrix Exponentiation                → recurrence tuyến tính với n ≤ 10^18 (Fibonacci, đếm đường đi)
+Binary Search                        → tìm kiếm trên mảng/hàm đơn điệu, lower/upper bound
+Parametric Search (BS on Answer)     → tìm giá trị nhỏ nhất/lớn nhất thỏa điều kiện feasible
+Backtracking                         → liệt kê tổ hợp/hoán vị, N nhỏ, có pruning
+Two Pointer / Sliding Window         → tìm đoạn con thỏa điều kiện, cặp phần tử trong mảng sắp xếp
+Sweep Line                           → xử lý khoảng/intervals theo tọa độ, diện tích hình chữ nhật
+Sieve of Eratosthenes                → tìm tất cả số nguyên tố đến N, phân tích nhân tử
+Modular Arithmetic / Fermat          → kết quả lấy mod lớn, nghịch đảo modulo, C(n,k) mod p
+Combinatorics                        → đếm số cách chọn/sắp xếp, đường đi lưới, stars and bars
+Inclusion-Exclusion Principle        → đếm phần tử thỏa ≥1 trong n điều kiện, n ≤ 20
+Game Theory / Sprague-Grundy / Nim   → 2 người chơi lần lượt, ai không đi được là thua
+Greedy                               → chọn tối ưu cục bộ từng bước, sắp xếp + duyệt
+Divide and Conquer                   → chia đôi bài toán độc lập, merge sort, closest pair
+Geometry                             → diện tích đa giác, giao điểm, convex hull
+Kadane's Algorithm                   → subarray liên tiếp có tổng lớn nhất/nhỏ nhất
+Knapsack DP (0/1 Knapsack)           → chọn vật phẩm tổng ≤ W, đạt tổng S, số cách chọn
+GCD / Euclidean Algorithm            → ước chung lớn nhất, chia hết, phân số tối giản
+Pigeonhole Principle                 → chứng minh tồn tại collision, tìm duplicate
+Merge Sort                           → sắp xếp ổn định, đếm inversion pairs
+Tree Isomorphism                     → kiểm tra 2 cây cùng cấu trúc, hash subtree
+Coordinate Compression               → giá trị lớn 10^9 nhưng số lượng điểm ít, dùng với BIT/SegTree
+Ad-hoc / Brute Force / Implementation → N nhỏ, mô phỏng trực tiếp, không có cấu trúc đặc biệt
