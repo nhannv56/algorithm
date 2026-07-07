@@ -17,10 +17,10 @@ GIẢ MÃ:
           queue.push(v)
 
 C++ CÀI ĐẶT:
-  vector<int> adj[N];
-  int dist[N];
-  void bfs(int s) {
-      fill(dist, dist+N, -1);
+  vector<vector<int>> adj(N);
+  vector<int> dist(N);
+  void bfs(int s, int n) {
+      dist.assign(n, -1);
       queue<int> q;
       dist[s] = 0; q.push(s);
       while (!q.empty()) {
@@ -46,7 +46,7 @@ GIẢ MÃ:
         dfs(v)
 
 C++ CÀI ĐẶT:
-  bool visited[N];
+  vector<bool> visited(N);
   void dfs(int u) {
       visited[u] = true;
       for (int v : adj[u])
@@ -54,7 +54,7 @@ C++ CÀI ĐẶT:
   }
 
   // DFS tính subtree size
-  int sz[N];
+  vector<int> sz(N);
   void dfs(int u, int par) {
       sz[u] = 1;
       for (int v : adj[u])
@@ -82,10 +82,10 @@ GIẢ MÃ:
           pq.push({dist[v], v})
 
 C++ CÀI ĐẶT:
-  vector<pair<int,int>> adj[N];  // {neighbor, weight}
-  long long dist[N];
-  void dijkstra(int s) {
-      fill(dist, dist+N, LLONG_MAX);
+  vector<vector<pair<int,int>>> adj(N);  // {neighbor, weight}
+  vector<long long> dist(N);
+  void dijkstra(int s, int n) {
+      dist.assign(n, LLONG_MAX);
       priority_queue<pair<long long,int>, vector<pair<long long,int>>,
                      greater<>> pq;
       dist[s] = 0; pq.push({0, s});
@@ -118,7 +118,7 @@ GIẢ MÃ:
           dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
 
 C++ CÀI ĐẶT:
-  long long dist[N][N];
+  vector<vector<long long>> dist(N, vector<long long>(N, INF));
   void floyd(int n) {
       for (int k = 0; k < n; k++)
           for (int i = 0; i < n; i++)
@@ -147,9 +147,9 @@ GIẢ MÃ:
 C++ CÀI ĐẶT:
   struct Edge { int u, v, w; };
   vector<Edge> edges;
-  long long dist[N];
+  vector<long long> dist(N);
   bool bellman_ford(int s, int n) {
-      fill(dist, dist+n, LLONG_MAX);
+      dist.assign(n, LLONG_MAX);
       dist[s] = 0;
       for (int i = 0; i < n-1; i++)
           for (auto& [u,v,w] : edges)
@@ -176,8 +176,8 @@ GIẢ MÃ:
     if len(result) < N: có chu trình
 
 C++ CÀI ĐẶT:
-  vector<int> adj[N];
-  int indegree[N];
+  vector<vector<int>> adj(N);
+  vector<int> indegree(N);
   vector<int> topo_sort(int n) {
       queue<int> q;
       for (int i = 0; i < n; i++)
@@ -227,8 +227,8 @@ GIẢ MÃ:
     return true
 
 C++ CÀI ĐẶT:
-  int color[N];
-  bool check(int s) {
+  vector<int> color(N, -1);
+  bool check(int s, vector<vector<int>>& adj) {
       queue<int> q; q.push(s); color[s] = 0;
       while (!q.empty()) {
           int u = q.front(); q.pop();
@@ -263,11 +263,12 @@ GIẢ MÃ:
 
 C++ CÀI ĐẶT:
   const int LOG = 20;
-  int up[N][LOG], depth[N];
-  void dfs(int u, int p, int d) {
+  vector<vector<int>> up(N, vector<int>(LOG));
+  vector<int> depth(N);
+  void dfs(int u, int p, int d, vector<vector<int>>& adj) {
       depth[u] = d; up[u][0] = p;
       for (int k = 1; k < LOG; k++) up[u][k] = up[up[u][k-1]][k-1];
-      for (int v : adj[u]) if (v != p) dfs(v, u, d+1);
+      for (int v : adj[u]) if (v != p) dfs(v, u, d+1, adj);
   }
   int lca(int u, int v) {
       if (depth[u] < depth[v]) swap(u,v);
@@ -295,12 +296,13 @@ GIẢ MÃ (ví dụ: maximum independent set trên cây):
       dp[v][1] += dp[c][0]
 
 C++ CÀI ĐẶT:
-  int dp[N][2], val[N];
-  void dfs(int u, int p) {
+  vector<vector<int>> dp(N, vector<int>(2));
+  vector<int> val(N);
+  void dfs(int u, int p, vector<vector<int>>& adj) {
       dp[u][0] = 0; dp[u][1] = val[u];
       for (int v : adj[u]) {
           if (v == p) continue;
-          dfs(v, u);
+          dfs(v, u, adj);
           dp[u][0] += max(dp[v][0], dp[v][1]);
           dp[u][1] += dp[v][0];
       }
@@ -318,10 +320,11 @@ GIẢ MÃ:
   // subtree của v = đoạn [in[v], out[v]] trên mảng Euler
 
 C++ CÀI ĐẶT:
-  int in_time[N], out_time[N], order[N], timer = 0;
-  void dfs(int u, int p) {
+  vector<int> in_time(N), out_time(N), order(N);
+  int timer = 0;
+  void dfs(int u, int p, vector<vector<int>>& adj) {
       in_time[u] = ++timer; order[timer] = u;
-      for (int v : adj[u]) if (v != p) dfs(v, u);
+      for (int v : adj[u]) if (v != p) dfs(v, u, adj);
       out_time[u] = timer;
   }
   // truy vấn subtree u: range [in_time[u], out_time[u]] trên mảng order[]
@@ -350,8 +353,8 @@ GIẢ MÃ:
     tree[node] = tree[2*node] + tree[2*node+1]
 
 C++ CÀI ĐẶT:
-  long long tree[4*N];
-  void build(int node, int l, int r, int* a) {
+  vector<long long> tree(4*N);
+  void build(int node, int l, int r, vector<int>& a) {
       if (l == r) { tree[node] = a[l]; return; }
       int mid = (l+r)/2;
       build(2*node,l,mid,a); build(2*node+1,mid+1,r,a);
@@ -390,9 +393,9 @@ GIẢ MÃ:
   range_sum(l, r) = query(r) - query(l-1)
 
 C++ CÀI ĐẶT:
-  long long tree[N+1];
-  void update(int i, long long delta) {
-      for (; i <= N; i += i&(-i)) tree[i] += delta;
+  vector<long long> tree(N + 1);
+  void update(int i, long long delta, int n) {
+      for (; i <= n; i += i&(-i)) tree[i] += delta;
   }
   long long query(int i) {
       long long s = 0;
@@ -419,8 +422,9 @@ GIẢ MÃ:
     return min(sparse[k][l], sparse[k][r-(1<<k)+1])
 
 C++ CÀI ĐẶT:
-  int sparse[LOG][N], lg[N+1];
-  void build(int* a, int n) {
+  vector<vector<int>> sparse(LOG, vector<int>(N));
+  vector<int> lg(N + 1);
+  void build(vector<int>& a, int n) {
       for (int i = 0; i < n; i++) sparse[0][i] = a[i];
       for (int k = 1; (1<<k) <= n; k++)
           for (int i = 0; i+(1<<k)-1 < n; i++)
@@ -448,8 +452,8 @@ GIẢ MÃ:
                    - prefix[r2][c1-1] + prefix[r1-1][c1-1]
 
 C++ CÀI ĐẶT:
-  long long pre[N+1];
-  void build(int* a, int n) {
+  vector<long long> pre(N + 1);
+  void build(vector<int>& a, int n) {
       pre[0] = 0;
       for (int i = 1; i <= n; i++) pre[i] = pre[i-1] + a[i];
   }
@@ -504,17 +508,19 @@ GIẢ MÃ:
 
 C++ CÀI ĐẶT:
   struct Trie {
-      int ch[MAXN][26], cnt;
-      bool end[MAXN];
-      Trie() : cnt(0) { memset(ch[0], -1, sizeof(ch[0])); end[0] = false; }
+      vector<vector<int>> ch;
+      vector<bool> end;
+      int cnt;
+      Trie(int max_nodes) {
+          ch.assign(max_nodes, vector<int>(26, -1));
+          end.assign(max_nodes, false);
+          cnt = 0;
+      }
       void insert(const string& s) {
           int cur = 0;
           for (char c : s) {
               int x = c-'a';
-              if (ch[cur][x] == -1) {
-                  ch[++cnt][0] = -1; memset(ch[cnt],-1,sizeof(ch[cnt]));
-                  end[cnt] = false; ch[cur][x] = cnt;
-              }
+              if (ch[cur][x] == -1) ch[cur][x] = ++cnt;
               cur = ch[cur][x];
           }
           end[cur] = true;
@@ -540,8 +546,11 @@ GIẢ MÃ:
     return true
 
 C++ CÀI ĐẶT:
-  int par[N], rnk[N];
-  void init(int n) { iota(par, par+n, 0); fill(rnk, rnk+n, 0); }
+  vector<int> par(N), rnk(N);
+  void init(int n) {
+      iota(par.begin(), par.begin() + n, 0);
+      rnk.assign(n, 0);
+  }
   int find(int x) { return par[x] == x ? x : par[x] = find(par[x]); }
   bool unite(int x, int y) {
       x = find(x); y = find(y);
@@ -616,11 +625,13 @@ GIẢ MÃ (TSP):
   answer = min over i of (dp[(1<<N)-1][i] + cost[i][start])
 
 C++ CÀI ĐẶT:
-  int dp[1<<N][N], cost[N][N];
+  vector<vector<int>> dp(1 << n, vector<int>(n, INF));
+  vector<vector<int>> cost(n, vector<int>(n));
   // khởi tạo INF, dp[1<<start][start] = 0
   for (int mask = 0; mask < (1<<n); mask++)
       for (int i = 0; i < n; i++) {
           if (!(mask>>i&1)) continue;
+          if (dp[mask][i] == INF) continue;
           for (int j = 0; j < n; j++) {
               if (mask>>j&1) continue;
               dp[mask|(1<<j)][j] = min(dp[mask|(1<<j)][j], dp[mask][i]+cost[i][j]);
@@ -641,13 +652,14 @@ GIẢ MÃ (Matrix Chain Multiplication):
         dp[i][j] = min(dp[i][j], dp[i][k] + dp[k+1][j] + dim[i]*dim[k+1]*dim[j+1])
 
 C++ CÀI ĐẶT:
-  int dp[N][N];
+  vector<vector<int>> dp(n, vector<int>(n));
   for (int len = 2; len <= n; len++)
       for (int i = 0; i+len-1 < n; i++) {
           int j = i+len-1;
           dp[i][j] = INT_MAX;
           for (int k = i; k < j; k++)
-              dp[i][j] = min(dp[i][j], dp[i][k]+dp[k+1][j]+cost(i,k,j));
+              if (dp[i][k] != INT_MAX && dp[k+1][j] != INT_MAX)
+                  dp[i][j] = min(dp[i][j], dp[i][k]+dp[k+1][j]+cost(i,k,j));
       }
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -951,7 +963,7 @@ GIẢ MÃ:
   // Stars and bars: số cách phân x vào k nhóm không âm = C(x+k-1, k-1)
 
 C++ CÀI ĐẶT:
-  long long C[N][N];
+  vector<vector<long long>> C(N, vector<long long>(N));
   void precompute(int n) {
       for (int i = 0; i <= n; i++) {
           C[i][0] = 1;
@@ -998,7 +1010,7 @@ C++ CÀI ĐẶT:
       while (s.count(m)) m++;
       return m;
   }
-  int grundy[MAXSTATE];
+  vector<int> grundy(MAXSTATE);
   void precompute() {
       grundy[0] = 0; // base: không đi được → G=0
       for (int s = 1; s < MAXSTATE; s++) {
@@ -1149,10 +1161,10 @@ C++ CÀI ĐẶT:
   long long lcm(long long a, long long b) { return a/gcd(a,b)*b; }
 
 ────────────────────────────────────────────────────────────────────────────────
-42. Pigeonhole Principle
+42. Pigeonhole Principle & Cycle Detection
 ────────────────────────────────────────────────────────────────────────────────
 GIẢ MÃ (tìm duplicate trong mảng [1..N] với N+1 phần tử):
-  for x in a: nếu đã thấy x → return x (duplicate)
+  for x in a: nếu đã thấy x -> return x (duplicate)
 
 GIẢ MÃ (binary search + pigeonhole - tìm duplicate trong [1..N]):
   lo = 1, hi = N
@@ -1162,9 +1174,36 @@ GIẢ MÃ (binary search + pigeonhole - tìm duplicate trong [1..N]):
     if count > mid - lo + 1: hi = mid   // duplicate ở nửa trái
     else: lo = mid + 1
 
+GIẢ MÃ (Cycle Detection - ứng dụng cho bài toán mô phỏng bước đi vòng tròn):
+  // k: số bước/ngày cần thực hiện
+  // n: số trạng thái (ví dụ n học sinh)
+  // days[pos]: lưu ngày đầu tiên đến được vị trí pos
+  Nếu đã thăm pos (days[pos] != -1):
+    cycleLen = currentDay - days[pos]
+    numCycle = (k - currentDay) / cycleLen
+    currentDay += numCycle * cycleLen
+    total_result += numCycle * (current_result - results[pos])
+    cycle_found = true
+
+C++ CÀI ĐẶT (Cycle Detection ứng dụng Concert Rehearsal):
+  vector<long long> days(n, -1), full(n, -1);
+  for (long long m = 1; m <= k; ++m) {
+      // Logic di chuyển tìm vị trí mới 'i' và kết quả 'c'
+      if (days[i] != -1 && !jumped) {
+          long long len = m - days[i];
+          long long num = (k - m) / len;
+          m += num * len;
+          c += num * (c - full[i]);
+          jumped = true;
+      }
+      days[i] = m; full[i] = c;
+      if (m == k) return c;
+  }
+
 LƯU Ý:
-  - Dùng để chứng minh: "Với N cặp, ít nhất 1 giá trị xuất hiện ≥ 2 lần"
-  - Kết hợp với đếm/hash để xác định phần tử cụ thể
+  - Pigeonhole Principle: "N+1 con chim vào N chuồng -> ít nhất 1 chuồng có >= 2 con"
+  - Ứng dụng: Chứng minh luôn tồn tại chu kỳ trong các bài toán trạng thái hữu hạn.
+  - Tối ưu: Giảm độ phức tạp từ O(K) xuống O(N) khi K cực lớn (10^12+).
 
 ────────────────────────────────────────────────────────────────────────────────
 43. Merge Sort
