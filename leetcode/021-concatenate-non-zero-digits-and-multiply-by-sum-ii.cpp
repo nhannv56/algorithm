@@ -45,6 +45,7 @@ public:
             int r = queries[i][1] + 1;
             int noneZeroCount = cnt[r] - cnt[l];
             long long sumlr = sum[r] - sum[l];
+            // ex: 12345 -> l = 2, r = 4 -> loại bỏ 0-> 12345 - 123*10^2 => 45 là số lr MOD đảm bảo công thức cho modulo
             long long valX = (x[r] - x[l] * pow10[noneZeroCount] % MOD + MOD) % MOD;
             res[i]=(valX*sumlr) %MOD;
         }
