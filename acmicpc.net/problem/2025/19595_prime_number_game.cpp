@@ -1,10 +1,10 @@
 /******************************************************************************
 
-https://www.acmicpc.net/problem/12055
+https://codejam.lge.com/problem/19595
 algo:dp
-algo:prefix sum
 algo:prime
 algo:game
+algo: sliding window
 
 *******************************************************************************/
 #include <iostream>
@@ -33,6 +33,7 @@ bool isWin(int N){
         return false;
     }
     if(winner[N] == -1){
+        //người chơi A chọn 1 prime, và phần còn lại người chơi B không thể win -> A win vì chọn tối ưu
         for(int i = 0; i < primes.size() && primes[i] <= N; i++){
             if(!isWin(N-primes[i])){// next turn cannot win so current turn win
                 winner[N] = 1;         
@@ -61,10 +62,10 @@ pair<int,int> solve(int A, int k){
     bobWin = curBobWin;
     minXBW = 2;
     for(int x = 3; x <= xRange; ++x){// x range
-        if(!isWin(x-1)){
+        if(!isWin(x-1)){//lượt alice không win -> bob win -> loại bỏ vì bỏ qua x-1
             --curBobWin;
         }
-        if(!isWin(x+k-1)){
+        if(!isWin(x+k-1)){//alice chơi trước -> alice ko win ->bob win
             ++curBobWin;
         }
         //update result
