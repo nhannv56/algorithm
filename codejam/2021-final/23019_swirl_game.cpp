@@ -8,6 +8,9 @@ https://codejam.lge.com/problem/23019
 using namespace std;
 
 long long N, T;
+/**
+ * đệ quy tính vòng trong
+ */
 pair<string,string> cal(vector<string> & row,vector<string> & cols,vector<string> & rrow,vector<string> & rcols, int a, int b,const int s){
     if(s==1){
         string s = "";
@@ -18,11 +21,12 @@ pair<string,string> cal(vector<string> & row,vector<string> & cols,vector<string
         return {"",""};
     }
     int i = (N-s)/2;
+    //tính ii 2 vòng
     string ri = row[i].substr(i,s-1)+cols[N-i-1].substr(i,s-1)+rrow[N-i-1].substr(i,s-1)+rcols[i].substr(i,s-1);
     ri+=ri;
     string le = cols[i].substr(i,s-1)+row[N-i-1].substr(i,s-1)+rcols[N-i-1].substr(i,s-1)+rrow[i].substr(i,s-1);
     le+=le;
-    string s1,s2;
+    string s1,s2; //lấy 1 vòng bằng cách dịch s-1 đơn vị xuôi và ngược chiều
     int na,nb;
     if(a==b ){
         if(a < N/2)
