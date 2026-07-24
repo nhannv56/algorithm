@@ -18,8 +18,21 @@ vector<long long> gt(20);
 void giaithua(){
     gt[1]=1;
     for(long long g = 2; g < 20;++g){
-        gt[g]= gt[g-1]*g;
+        gt[g]= (gt[g-1]*g) % MOD;
     }
+}
+
+long long get_count(const map<long long, long long>& m, long long val) {
+    if (m.empty()) return 0;
+    auto it = m.lower_bound(val);
+    if (it != m.end() && it->first == val) {
+        return it->second;
+    }
+    if (it == m.begin()) {
+        return 0;
+    }
+    --it;
+    return it->second;
 }
 long long solve(vector<long long> & E, vector<long long> & W){
     long long res = 0;
@@ -42,7 +55,7 @@ long long solve(vector<long long> & E, vector<long long> & W){
         }
         cE[nbit][sum]++;
         if(nbit==1 &&C<=sum && sum<=D){
-            ++res;
+            res = (res + 1) % MOD;
         }
     }
     for(int i = 1; i < maxW;++i){
@@ -58,7 +71,7 @@ long long solve(vector<long long> & E, vector<long long> & W){
             ++b;
         }
         if(nbit==1 &&C<=sum && sum<=D){
-            ++res;
+            res = (res + 1) % MOD;
         }
         cW[nbit][sum]++;
     }
@@ -95,29 +108,15 @@ long long solve(vector<long long> & E, vector<long long> & W){
                     if(exS2 <=0 &&exD2 <=0){
                         continue;
                     }
-                    auto it1 = cW[j].lower_bound(exS2);
-                    auto it2 = cW[j].lower_bound(exD2);
                     
-                    if(it1 != cW[j].end()){
-                        auto w1 = 0;
-                        if(it1 != cW[j].begin()){
-                            it1--;
-                            w1 = it1->second;
-                        }
-                        auto w2 = 0;
-
-                        if(it2!= cW[j].end()){
-                            if(it2->first > exD2){
-                                --it2;
-                            }
-                            w2 = it2->second-w1;
-                        }else{
-                            w2 = cW[j].rbegin()->second - w1;
-                        }
-                        auto cur=gt[i]*gt[j]*(i==j?2:1)*c1*w2;//todo
-                        res+=cur;
-                        // cout<<"i:"<<i<<" "<<j<<" "<<c1<<" "<<w2<<" "<<cur<<endl;
-                        res%=MOD;
+                    long long w2 = get_count(cW[j], exD2) - get_count(cW[j], exS2 - 1);
+                    if (w2 > 0) {
+                        long long cur = c1 % MOD;
+                        cur = (cur * (w2 % MOD)) % MOD;
+                        cur = (cur * gt[i]) % MOD;
+                        cur = (cur * gt[j]) % MOD;
+                        if (i == j) cur = (cur * 2) % MOD;
+                        res = (res + cur) % MOD;
                     }
                 }
             }
