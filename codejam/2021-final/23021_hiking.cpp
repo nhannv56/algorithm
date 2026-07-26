@@ -18,15 +18,28 @@ vector<long long> gt(20);
 void giaithua(){
     gt[1]=1;
     for(long long g = 2; g < 20;++g){
-        gt[g]= gt[g-1]*g;
+        gt[g]= (gt[g-1]*g) % MOD;
     }
+}
+
+long long get_count(const map<long long, long long>& m, long long val) {
+    if (m.empty()) return 0;
+    auto it = m.lower_bound(val);
+    if (it != m.end() && it->first == val) {
+        return it->second;
+    }
+    if (it == m.begin()) {
+        return 0;
+    }
+    --it;
+    return it->second;
 }
 long long solve(vector<long long> & E, vector<long long> & W){
     long long res = 0;
-    int maxE = pow(2,n);
+    int maxE = 1 << n;
     giaithua();
-    int maxW = pow(2,m);
-    vector<map<long long, long long>> cE(n+1), cW(m+1);
+    int maxW = 1 << m;
+    vector<vector<long long>> cE(n+1), cW(m+1);
 
     for(int i = 1; i < maxE;++i){
         auto nbit = __builtin_popcount(i);
@@ -34,15 +47,15 @@ long long solve(vector<long long> & E, vector<long long> & W){
         int can = i;
         int b = 0;
         while(can> 0){
-            if(can & 1 ==1){
+            if(can & 1){
                 sum+=E[b];
             }
             can>>=1;
             ++b;
         }
-        cE[nbit][sum]++;
-        if(nbit==1 &&C<=sum && sum<=D){
-            ++res;
+        cE[nbit].push_back(sum);
+        if(nbit==1 && C<=sum && sum<=D){
+            res = (res + 1) % MOD;
         }
     }
     for(int i = 1; i < maxW;++i){
@@ -51,73 +64,42 @@ long long solve(vector<long long> & E, vector<long long> & W){
         int can = i;
         int b = 0;
         while(can> 0){
-            if(can & 1 ==1){
+            if(can & 1){
                 sum+=W[b];
             }
             can>>=1;
             ++b;
         }
-        if(nbit==1 &&C<=sum && sum<=D){
-            ++res;
+        if(nbit==1 && C<=sum && sum<=D){
+            res = (res + 1) % MOD;
         }
-        cW[nbit][sum]++;
+        cW[nbit].push_back(sum);
     }
-    // for(auto & vt : cE){
-    //     // sort(vt.begin(), vt.end());
-    //     // for(auto s : vt){
-    //     //     cout<<s<<" ";
-    //     // }cout<<endl;
-    //     auto pre = vt.begin();
-    //     for(auto it = vt.begin(); it != vt.end();++it){
-    //         if(it != vt.begin()){
-    //             it->second += pre->second;
-    //         }
-    //         pre = it;
-    //     }
-    // }
-    for(auto & vt : cW){
-        // sort(vt.begin(), vt.end());
-        auto pre = vt.begin();
-        for(auto it = vt.begin(); it != vt.end();++it){
-            if(it != vt.begin()){
-                it->second += pre->second;
-            }
-            pre = it;
-        }
+    
+    for(int i = 1; i <= m; ++i){
+        sort(cW[i].begin(), cW[i].end());
     }
+
     for(long long i = 1; i <=n;++i){
         for(long long j = i-1; j <=i+1;++j){
-            // cout<<"ij:"<<i<<" "<<j<<endl;
             if(j > 0 && j <= m){
-                for(auto [s1,c1] : cE[i]){
+                for(long long s1 : cE[i]){
                     auto exS2= C-(s1+(i+j-1)*x);
                     auto exD2= D-(s1+(i+j-1)*x);
-                    if(exS2 <=0 &&exD2 <=0){
+                    if(exD2 < 0){
                         continue;
                     }
-                    auto it1 = cW[j].lower_bound(exS2);
-                    auto it2 = cW[j].lower_bound(exD2);
                     
-                    if(it1 != cW[j].end()){
-                        auto w1 = 0;
-                        if(it1 != cW[j].begin()){
-                            it1--;
-                            w1 = it1->second;
-                        }
-                        auto w2 = 0;
-
-                        if(it2!= cW[j].end()){
-                            if(it2->first > exD2){
-                                --it2;
-                            }
-                            w2 = it2->second-w1;
-                        }else{
-                            w2 = cW[j].rbegin()->second - w1;
-                        }
-                        auto cur=gt[i]*gt[j]*(i==j?2:1)*c1*w2;//todo
-                        res+=cur;
-                        // cout<<"i:"<<i<<" "<<j<<" "<<c1<<" "<<w2<<" "<<cur<<endl;
-                        res%=MOD;
+                    auto it1 = lower_bound(cW[j].begin(), cW[j].end(), exS2);
+                    auto it2 = upper_bound(cW[j].begin(), cW[j].end(), exD2);
+                    long long w2 = distance(it1, it2);
+                    
+                    if (w2 > 0) {
+                        long long cur = w2 % MOD;
+                        cur = (cur * gt[i]) % MOD;
+                        cur = (cur * gt[j]) % MOD;
+                        if (i == j) cur = (cur * 2) % MOD;
+                        res = (res + cur) % MOD;
                     }
                 }
             }
