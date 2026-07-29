@@ -72,11 +72,24 @@ pair<int, long long> dfs(int u) {
         if (count1 >= 2) {
             // Có từ 2 nhánh trở lên cùng đạt độ dài lớn nhất L1
             // Số cặp = ( (Σ c_i)^2 - Σ (c_i^2) ) / 2
-            long long sum_sq = 0;
+            // long long sum_sq = 0;
+            // for (int i = 0; i < count1; ++i) {
+            //     sum_sq += valid[i].second * valid[i].second;
+            // }
+            // long long ways = (sum_c1 * sum_c1 - sum_sq) / 2;
+
+            //cơ bản
+            // count1 là số lượng nhánh con cùng có độ dài lớn nhất L1
+            long long ways = 0;
+
+            // Duyệt qua từng cặp nhánh con (i, j) phân biệt
             for (int i = 0; i < count1; ++i) {
-                sum_sq += valid[i].second * valid[i].second;
+                for (int j = i + 1; j < count1; ++j) {
+                    // Với mỗi cặp nhánh i và j, số cách kết hợp là (số cách nhánh i) * (số cách nhánh j)
+                    ways += valid[i].second * valid[j].second;
+                }
             }
-            long long ways = (sum_c1 * sum_c1 - sum_sq) / 2;
+
             update(2 * L1 + 1, ways);
         } else {
             // Chỉ có 1 nhánh đạt L1, ghép với các nhánh đạt L2 (độ dài lớn thứ 2)
@@ -110,9 +123,13 @@ void solve() {
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
+    std::ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
+    cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
     int T;
     if (cin >> T) {
         while (T--) {
