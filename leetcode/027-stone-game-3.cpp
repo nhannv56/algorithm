@@ -1,5 +1,6 @@
 //https://leetcode.com/problems/stone-game-iii/?envType=daily-question&envId=2026-08-03
 // algo: dp
+// đảo ngược dp, tránh đệ quy nhiều
 class Solution {
 public:
     vector<pair<int, int>> dp =
